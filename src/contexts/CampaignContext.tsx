@@ -135,11 +135,14 @@ function activeIntervalsToSchedule(intervals: ApiCampaign["active_intervals"] | 
 
 function buildApiTargeting(targeting: Record<string, TargetingState>): Pick<ApiCampaign, TargetKey> {
   const out = {} as Pick<ApiCampaign, TargetKey>;
-  for (const k of TARGET_KEYS) out[k] = targetingStateToMap(targeting[k] || { mode: "none", items: [] });
+  for (const [uiKey, apiKey] of TARGET_KEY_MAP) out[apiKey] = targetingStateToMap(targeting[uiKey] || { mode: "none", items: [] });
   return out;
 }
 function readApiTargeting(c: ApiCampaign): Record<string, TargetingState> {
-  return Object.fromEntries(TARGET_KEYS.map(k => [k, targetingMapToState(c[k])]));
+  return {
+    ...Object.fromEntries(TARGET_KEY_MAP.map(([uiKey, apiKey]) => [uiKey, targetingMapToState(c[apiKey])])),
+    schedule: activeIntervalsToSchedule(c.active_intervals),
+  };
 }
 
 // ---- Mapping --------------------------------------------------------------
