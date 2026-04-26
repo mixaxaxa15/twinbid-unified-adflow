@@ -320,19 +320,21 @@ export function PendingPaymentDialog() {
     <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[500px] bg-card border-border">
         <DialogHeader>
-          <DialogTitle>{t("balance.paymentTitle")} {pendingPayment ? `$${((pendingPayment.amount || 0) + (pendingPayment.bonus ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100) : 0)).toLocaleString()}` : ""}</DialogTitle>
+          <DialogTitle>{t("balance.paymentTitle")} {pendingPayment ? `$${((pendingPayment.amount || 0) + (pendingPayment.bonus_amount ?? (pendingPayment.bonus ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100) : 0))).toLocaleString()}` : ""}</DialogTitle>
           <DialogDescription>{t("balance.paymentDesc")}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
             <p className="text-sm font-medium">{t("balance.topUpAmount")} <span className="text-primary">${pendingPayment?.amount.toLocaleString()}</span></p>
-            {pendingPayment?.bonus ? (() => {
-              const bonusAmt = Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100);
+            {pendingPayment && (pendingPayment.bonus_amount || pendingPayment.bonus) ? (() => {
+              const bonusAmt = pendingPayment.bonus_amount ?? Math.floor((pendingPayment.amount * (pendingPayment.bonus || 0)) / 100);
               const total = (pendingPayment.amount || 0) + bonusAmt;
+              const exactPct = pendingPayment.amount > 0 ? (bonusAmt / pendingPayment.amount) * 100 : (pendingPayment.bonus || 0);
+              const pctLabel = Number.isInteger(exactPct) ? exactPct.toString() : exactPct.toFixed(1).replace(/\.0$/, "");
               return (
                 <>
                   <p className="text-sm text-primary mt-1">
-                    + {t("balance.promo.bonusShort")}: +{bonusAmt}$ {pendingPayment.promo ? `(${pendingPayment.promo}, +${pendingPayment.bonus}%)` : `(+${pendingPayment.bonus}%)`}
+                    + {t("balance.promo.bonusShort")}: +{bonusAmt}$ {pendingPayment.promo ? `(${pendingPayment.promo}, +${pctLabel}%)` : `(+${pctLabel}%)`}
                   </p>
                   <p className="text-sm font-medium mt-1">
                     = <span className="text-primary">${total.toLocaleString()}</span>
