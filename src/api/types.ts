@@ -49,8 +49,8 @@ export interface ApiCampaign {
   goal_total_dollars: number;
   /** filled by backend only */
   cum_done_dollars: number;
-  start_ts: string;
-  end_ts: string;
+  start_ts: string | null;
+  end_ts: string | null;
   active_intervals: ScheduleInterval[];
   country: TargetingMap;
   language: TargetingMap;
