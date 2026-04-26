@@ -91,7 +91,7 @@ export default function DashboardBalance() {
       // Reject if this user already has a *completed/pending* transaction tied to this promo.
       // Ignore created/cancelled transactions which represent abandoned attempts.
       const alreadyUsed = topupRequests.some(
-        (tx) => tx.promocode_id === promo.id
+        (tx) => (tx.promocode_id === promo.id || tx.promocode_id === code)
           && (!user || tx.user_id === user.id)
           && tx.status !== "draft"
           && tx.status !== "cancelled"
@@ -129,7 +129,7 @@ export default function DashboardBalance() {
       transaction_id: "",
       payment_method: selectedMethod,
       bonus_amount: bonusAmount,
-      promocode_id: appliedPromo?.id ?? null,
+      promocode_id: appliedPromo?.code ?? null,
       transaction_hash: null,
       deposit_amount: finalAmount,
       total_balance_increase: finalAmount + bonusAmount,
@@ -141,24 +141,15 @@ export default function DashboardBalance() {
       const created = await api.createTransaction(body);
       txId = created.id;
     } catch (e: any) {
-      if (!appliedPromo?.id || !String(e?.message || e).toLowerCase().includes("promo")) {
-        toast.error(`${t("balance.toast.submitError") || "Error"}: ${e?.message || e}`);
-        return;
-      }
-      try {
-        const created = await api.createTransaction({ ...body, promocode_id: null });
-        txId = created.id;
-      } catch (retryError: any) {
-        toast.error(`${t("balance.toast.submitError") || "Error"}: ${retryError?.message || retryError}`);
-        return;
-      }
+      toast.error(`${t("balance.toast.submitError") || "Error"}: ${e?.message || e}`);
+      return;
     }
     setPendingPayment({
       amount: finalAmount,
       method: selectedMethod,
       promo: appliedPromo?.code,
       bonus: appliedPromo?.bonus,
-      promocode_id: appliedPromo?.id ?? null,
+      promocode_id: appliedPromo?.code ?? null,
       transaction_id: txId,
     });
     setAppliedPromo(null);
