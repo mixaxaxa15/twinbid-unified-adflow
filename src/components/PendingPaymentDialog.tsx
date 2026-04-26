@@ -67,6 +67,7 @@ export function PendingPaymentDialog() {
                 amount: Number(tx.deposit_amount) || 0,
                 method: tx.payment_method || "usdt_trc20",
                 bonus: pct || undefined,
+                bonus_amount: Number(tx.bonus_amount) || 0,
                 promocode_id: tx.promocode_id ?? null,
                 transaction_id: tx.id,
               });
@@ -270,9 +271,9 @@ export function PendingPaymentDialog() {
       if (pendingNotifId && notifications.some(n => n.id === pendingNotifId)) {
         return;
       }
-      const bonusAmount = pendingPayment.bonus
-        ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100)
-        : 0;
+      const bonusAmount = pendingPayment.bonus_amount != null
+        ? pendingPayment.bonus_amount
+        : (pendingPayment.bonus ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100) : 0);
       const notificationAmount = pendingPayment.amount + bonusAmount;
       const id = await addNotification({
         title: t("balance.notif.notCompleted"),
