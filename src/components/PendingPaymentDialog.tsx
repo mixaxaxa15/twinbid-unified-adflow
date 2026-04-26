@@ -67,6 +67,7 @@ export function PendingPaymentDialog() {
                 amount: Number(tx.deposit_amount) || 0,
                 method: tx.payment_method || "usdt_trc20",
                 bonus: pct || undefined,
+                bonus_amount: Number(tx.bonus_amount) || 0,
                 promocode_id: tx.promocode_id ?? null,
                 transaction_id: tx.id,
               });
