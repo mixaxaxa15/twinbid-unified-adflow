@@ -64,6 +64,28 @@ export default function DashboardBalance() {
 
   useEffect(() => { fetchTopupRequests(); }, [user]);
 
+  // Resolve promo code names (id → code text) for transactions that reference one.
+  useEffect(() => {
+    const ids = Array.from(new Set(
+      topupRequests
+        .map(r => r.promocode_id)
+        .filter((v): v is string => !!v && /^[0-9a-f-]{36}$/i.test(v) && !promoNames[v])
+    ));
+    if (ids.length === 0) return;
+    (async () => {
+      try {
+        const { data } = await supabase.from("promo_codes").select("id, code").in("id", ids);
+        if (data) {
+          setPromoNames(prev => {
+            const next = { ...prev };
+            data.forEach((p: any) => { next[p.id] = p.code; });
+            return next;
+          });
+        }
+      } catch (e) { console.warn("promo names fetch failed", e); }
+    })();
+  }, [topupRequests]);
+
   // Auto-refresh: poll every 5 minutes and on window focus / page show.
   // (Previously 15s, which was too aggressive.)
   useEffect(() => {
