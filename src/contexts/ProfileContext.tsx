@@ -59,7 +59,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       const u = await api.getProfile();
-      setProfile(fromApi(u, user.id));
+      setProfile((prev) => fromApi(u, user.id, prev));
     } catch (e) {
       console.error("Profile fetch error:", e);
     } finally {
@@ -71,7 +71,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   const updateProfile = useCallback(async (updates: Partial<Omit<Profile, "id">>) => {
     if (!user) return;
-    const patch: Partial<ApiUser> = {};
+    const patch: Partial<ApiUser> & Record<string, unknown> = {};
     if (updates.fullName !== undefined) patch.name = updates.fullName ?? "";
     if (updates.email !== undefined) patch.mail = updates.email ?? "";
     if (updates.telegram !== undefined) patch.telegram = updates.telegram;
@@ -79,9 +79,21 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     if (updates.balanceThreshold !== undefined) patch.balance_treshold = updates.balanceThreshold;
     if (updates.notifyCampaignStatus !== undefined) patch.campaign_status_notifications = updates.notifyCampaignStatus;
     if (updates.notifyLowBalance !== undefined) patch.low_balance_notifications = updates.notifyLowBalance;
-    if (updates.notifyCampaignBudget !== undefined) patch.campaign_balanse_notifications = updates.notifyCampaignBudget;
+    if (updates.notifyCampaignBudget !== undefined) {
+      // Send both spellings so the backend picks up the right key regardless
+      // of the historical `balanse` typo.
+      patch.campaign_balanse_notifications = updates.notifyCampaignBudget;
+      (patch as any).campaign_balance_notifications = updates.notifyCampaignBudget;
+    }
     const updated = await api.patchProfile(patch);
-    setProfile(fromApi(updated, user.id));
+    setProfile((prev) => {
+      const next = fromApi(updated, user.id, prev);
+      // If backend didn't echo back the budget flag, trust what we just sent.
+      if (updates.notifyCampaignBudget !== undefined) {
+        next.notifyCampaignBudget = updates.notifyCampaignBudget;
+      }
+      return next;
+    });
   }, [user]);
 
   return (
