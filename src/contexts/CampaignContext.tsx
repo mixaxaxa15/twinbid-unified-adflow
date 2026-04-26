@@ -148,13 +148,18 @@ function mapApiCreativeToUi(cr: ApiCreative): Creative {
   };
 }
 
-/** Convert a `YYYY-MM-DD` form value into the timestamps the backend expects. */
-function startTimestamp(date: string): string {
-  if (!date) return "";
+/**
+ * Convert a `YYYY-MM-DD` form value into the timestamps the backend expects.
+ * Returns `null` for empty values — the backend's Go time parser rejects "" with
+ * `parsing time "" as "2006-01-02T15:04:05Z07:00"`, so drafts with no dates
+ * MUST send null instead of an empty string.
+ */
+function startTimestamp(date: string): string | null {
+  if (!date) return null;
   return `${date}T00:00:00Z`;
 }
-function endTimestamp(date: string): string {
-  if (!date) return "";
+function endTimestamp(date: string): string | null {
+  if (!date) return null;
   // Inclusive end-of-day for the chosen end date.
   return `${date}T23:59:59Z`;
 }
