@@ -110,6 +110,7 @@ export default function DashboardBalance() {
       method: selectedMethod,
       promo: appliedPromo?.code,
       bonus: appliedPromo?.bonus,
+      promocode_id: appliedPromo?.id ?? null,
     });
     setAppliedPromo(null);
     setPromoCode("");
