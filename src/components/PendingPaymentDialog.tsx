@@ -278,7 +278,7 @@ export function PendingPaymentDialog() {
         persistent: true,
         apiType: "incomplete_topup",
         apiPayload: {
-          deposit_amount: notificationAmount,
+          deposit_amount: pendingPayment.amount,
           // Persist the tx id so a reload can rehydrate full bonus info.
           transaction_id: pendingPayment.transaction_id ?? null,
         },
