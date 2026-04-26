@@ -44,6 +44,8 @@ export default function DashboardBalance() {
   const [topupRequests, setTopupRequests] = useState<TopupRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
 
+  const [promoNames, setPromoNames] = useState<Record<string, string>>({});
+
   const balance = profile?.balance ?? 0;
 
   const fetchTopupRequests = async () => {
