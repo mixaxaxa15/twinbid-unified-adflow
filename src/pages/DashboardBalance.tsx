@@ -36,7 +36,7 @@ export default function DashboardBalance() {
   const [customAmount, setCustomAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("usdt_trc20");
   const [promoCode, setPromoCode] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState<{ code: string; bonus: number } | null>(null);
+  const [appliedPromo, setAppliedPromo] = useState<{ code: string; bonus: number; id: string } | null>(null);
   const [topupRequests, setTopupRequests] = useState<TopupRequest[]>([]);
   const [loadingRequests, setLoadingRequests] = useState(true);
 
