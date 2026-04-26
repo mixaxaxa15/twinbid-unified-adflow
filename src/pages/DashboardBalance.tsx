@@ -291,11 +291,19 @@ export default function DashboardBalance() {
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            {loadingRequests ? (
-              <div className="py-12 text-center text-muted-foreground">Loading...</div>
-            ) : topupRequests.length === 0 ? (
-              <div className="py-12 text-center text-muted-foreground">{t("balance.noTransactions")}</div>
-            ) : (
+            {(() => {
+              // `created` and `cancelled` are internal-only states (incomplete or
+              // abandoned attempts) — never shown in the user-facing history.
+              const visible = topupRequests.filter(
+                tx => tx.status !== "created" && tx.status !== "cancelled",
+              );
+              if (loadingRequests) {
+                return <div className="py-12 text-center text-muted-foreground">Loading...</div>;
+              }
+              if (visible.length === 0) {
+                return <div className="py-12 text-center text-muted-foreground">{t("balance.noTransactions")}</div>;
+              }
+              return (
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-border">
@@ -306,7 +314,7 @@ export default function DashboardBalance() {
                   </tr>
                 </thead>
                 <tbody>
-                  {topupRequests.map((req) => {
+                  {visible.map((req) => {
                     const methodLabel = usdtMethods.find(m => m.id === req.payment_method)?.label || req.payment_method;
                     const st = statusMap[req.status] || statusMap.pending;
                     return (
@@ -329,7 +337,8 @@ export default function DashboardBalance() {
                   })}
                 </tbody>
               </table>
-            )}
+              );
+            })()}
           </div>
         </CardContent>
       </Card>
