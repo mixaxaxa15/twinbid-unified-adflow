@@ -227,7 +227,7 @@ export default function DashboardBalance() {
               <div>
                 <p className="text-sm text-muted-foreground">{t("balance.current")}</p>
                 <p className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  {profileLoading ? "..." : `$${balance.toLocaleString()}`}
+                  {profileLoading ? "..." : `$${fmtMoney(balance)}`}
                 </p>
               </div>
             </div>
