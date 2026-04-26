@@ -58,6 +58,16 @@ export default function DashboardBalance() {
 
   useEffect(() => { fetchTopupRequests(); }, [user]);
 
+  // Auto-refresh: poll every 15s and on window focus so DB-side status changes
+  // (e.g. admin approves a topup) become visible without a manual reload.
+  useEffect(() => {
+    if (!user) return;
+    const interval = setInterval(fetchTopupRequests, 15000);
+    const onFocus = () => fetchTopupRequests();
+    window.addEventListener("focus", onFocus);
+    return () => { clearInterval(interval); window.removeEventListener("focus", onFocus); };
+  }, [user]);
+
   // Allow the global dialog to refresh our history after submission
   useEffect(() => {
     registerRefreshHandler(fetchTopupRequests);
