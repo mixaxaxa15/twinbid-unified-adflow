@@ -271,9 +271,9 @@ export function PendingPaymentDialog() {
       if (pendingNotifId && notifications.some(n => n.id === pendingNotifId)) {
         return;
       }
-      const bonusAmount = pendingPayment.bonus
-        ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100)
-        : 0;
+      const bonusAmount = pendingPayment.bonus_amount != null
+        ? pendingPayment.bonus_amount
+        : (pendingPayment.bonus ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100) : 0);
       const notificationAmount = pendingPayment.amount + bonusAmount;
       const id = await addNotification({
         title: t("balance.notif.notCompleted"),
