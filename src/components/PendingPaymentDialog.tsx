@@ -133,6 +133,9 @@ export function PendingPaymentDialog() {
       const depositAmount = pendingPayment.amount;
       const bonusPercent = pendingPayment.bonus || 0;
       const bonusAmount = Math.floor((depositAmount * bonusPercent) / 100);
+      if (pendingPayment.transaction_id) {
+        await api.cancelTransaction(pendingPayment.transaction_id);
+      }
       await api.createTransaction({
         user_id: user.id,
         transaction_time: new Date().toISOString(),
@@ -146,9 +149,6 @@ export function PendingPaymentDialog() {
         status: "pending",
         currency: "usdt",
       });
-      if (pendingPayment.transaction_id) {
-        api.cancelTransaction(pendingPayment.transaction_id).catch(e => console.error("cancel draft transaction failed", e));
-      }
     } catch (e: any) {
       toast.error(`${t("balance.toast.submitError") || "Error submitting payment"}: ${e?.message || e}`);
       console.error(e);
