@@ -93,7 +93,7 @@ export default function DashboardBalance() {
       const alreadyUsed = topupRequests.some(
         (tx) => tx.promocode_id === promo.id
           && (!user || tx.user_id === user.id)
-          && tx.status !== "created"
+          && tx.status !== "draft"
           && tx.status !== "cancelled"
       );
       if (alreadyUsed) {
