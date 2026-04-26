@@ -249,11 +249,20 @@ export function PendingPaymentDialog() {
         <div className="space-y-4 mt-2">
           <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
             <p className="text-sm font-medium">{t("balance.topUpAmount")} <span className="text-primary">${pendingPayment?.amount.toLocaleString()}</span></p>
-            {pendingPayment?.bonus ? (
-              <p className="text-sm text-primary mt-1">
-                + {t("balance.promo.bonusShort")}: +{Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100)}$ {pendingPayment.promo ? `(${pendingPayment.promo}, +${pendingPayment.bonus}%)` : `(+${pendingPayment.bonus}%)`}
-              </p>
-            ) : null}
+            {pendingPayment?.bonus ? (() => {
+              const bonusAmt = Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100);
+              const total = (pendingPayment.amount || 0) + bonusAmt;
+              return (
+                <>
+                  <p className="text-sm text-primary mt-1">
+                    + {t("balance.promo.bonusShort")}: +{bonusAmt}$ {pendingPayment.promo ? `(${pendingPayment.promo}, +${pendingPayment.bonus}%)` : `(+${pendingPayment.bonus}%)`}
+                  </p>
+                  <p className="text-sm font-medium mt-1">
+                    = <span className="text-primary">${total.toLocaleString()}</span>
+                  </p>
+                </>
+              );
+            })() : null}
           </div>
 
           <div className="space-y-2">
