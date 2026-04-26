@@ -81,8 +81,10 @@ export function PendingPaymentDialog() {
   const handleSubmitTx = async () => {
     if (!txHash.trim() || !user || !pendingPayment) return;
 
-    let promocodeId: string | null = null;
-    if (pendingPayment.promo) {
+    // Prefer the promocode_id captured at apply-time (avoids a second backend
+    // lookup that may fail if the code is case-sensitive or the endpoint is flaky).
+    let promocodeId: string | null = pendingPayment.promocode_id ?? null;
+    if (!promocodeId && pendingPayment.promo) {
       try {
         const promo = await api.getPromocode(pendingPayment.promo);
         promocodeId = promo.id;
