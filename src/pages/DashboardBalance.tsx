@@ -129,7 +129,8 @@ export default function DashboardBalance() {
       transaction_id: "",
       payment_method: selectedMethod,
       bonus_amount: bonusAmount,
-      promocode_id: appliedPromo?.code ?? null,
+      // Per contract this must be the promo UUID, not the code text.
+      promocode_id: appliedPromo?.id ?? null,
       transaction_hash: null,
       deposit_amount: finalAmount,
       total_balance_increase: finalAmount + bonusAmount,
@@ -144,12 +145,22 @@ export default function DashboardBalance() {
       toast.error(`${t("balance.toast.submitError") || "Error"}: ${e?.message || e}`);
       return;
     }
+    // Cache promo code text by tx id for history display (backend returns UUID).
+    if (txId && appliedPromo) {
+      try {
+        const map = JSON.parse(localStorage.getItem("twinbid_promo_codes") || "{}");
+        map[txId] = appliedPromo.code;
+        // Also key by promo id so other transactions made with the same promo show the code.
+        map[appliedPromo.id] = appliedPromo.code;
+        localStorage.setItem("twinbid_promo_codes", JSON.stringify(map));
+      } catch {}
+    }
     setPendingPayment({
       amount: finalAmount,
       method: selectedMethod,
       promo: appliedPromo?.code,
       bonus: appliedPromo?.bonus,
-      promocode_id: appliedPromo?.code ?? null,
+      promocode_id: appliedPromo?.id ?? null,
       transaction_id: txId,
     });
     setAppliedPromo(null);
