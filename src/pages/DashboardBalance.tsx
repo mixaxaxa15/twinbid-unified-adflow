@@ -86,7 +86,7 @@ export default function DashboardBalance() {
         toast.error(t("balance.promo.alreadyUsed"));
         return;
       }
-      setAppliedPromo({ code, bonus: Number(promo.bonus_percent) });
+      setAppliedPromo({ code, bonus: Number(promo.bonus_percent), id: promo.id });
       toast.success(t("balance.promo.applied").replace("{percent}", `${promo.bonus_percent}`));
     } catch {
       setAppliedPromo(null);
