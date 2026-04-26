@@ -265,8 +265,11 @@ export function PendingPaymentDialog() {
     // Closing without submitting hash → keep pending payment & raise persistent notification
     if (pendingPayment && !txHash.trim()) {
       closeDialog();
-      // Avoid duplicating the notification
-      clearPendingNotif();
+      // If a notification already exists (e.g. dialog was reopened from it),
+      // keep it as-is — do NOT clear or recreate.
+      if (pendingNotifId && notifications.some(n => n.id === pendingNotifId)) {
+        return;
+      }
       const bonusAmount = pendingPayment.bonus
         ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100)
         : 0;
