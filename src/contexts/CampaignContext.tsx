@@ -314,7 +314,8 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
     }
 
     if (updates.creatives !== undefined) {
-      const existing = await api.readCreatives(id).catch(() => [] as ApiCreative[]);
+      const existingRaw = await api.readCreatives(id).catch(() => [] as ApiCreative[]);
+      const existing: ApiCreative[] = Array.isArray(existingRaw) ? existingRaw : [];
       await Promise.all(existing.map(cr => api.deleteCreative(cr.id)));
       for (const cr of updates.creatives) {
         await api.createCreative(
