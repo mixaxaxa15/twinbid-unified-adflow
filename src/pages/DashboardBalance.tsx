@@ -137,7 +137,7 @@ export default function DashboardBalance() {
         transaction_hash: null,
         deposit_amount: finalAmount,
         total_balance_increase: finalAmount + bonusAmount,
-        status: "created",
+        status: "draft",
         currency: "USDT",
       });
       txId = created.id;
