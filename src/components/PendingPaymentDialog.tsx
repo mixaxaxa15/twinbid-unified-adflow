@@ -267,14 +267,18 @@ export function PendingPaymentDialog() {
       closeDialog();
       // Avoid duplicating the notification
       clearPendingNotif();
+      const bonusAmount = pendingPayment.bonus
+        ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100)
+        : 0;
+      const notificationAmount = pendingPayment.amount + bonusAmount;
       const id = await addNotification({
         title: t("balance.notif.notCompleted"),
-        description: `${t("balance.notif.noHash")} $${pendingPayment.amount}`,
+        description: `${t("balance.notif.noHash")} $${notificationAmount}`,
         type: "warning",
         persistent: true,
         apiType: "incomplete_topup",
         apiPayload: {
-          deposit_amount: pendingPayment.amount,
+          deposit_amount: notificationAmount,
           // Persist the tx id so a reload can rehydrate full bonus info.
           transaction_id: pendingPayment.transaction_id ?? null,
         },
