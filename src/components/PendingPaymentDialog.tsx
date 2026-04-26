@@ -306,7 +306,7 @@ export function PendingPaymentDialog() {
     <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[500px] bg-card border-border">
         <DialogHeader>
-          <DialogTitle>{t("balance.paymentTitle")} {pendingPayment ? `$${pendingPayment.amount.toLocaleString()}` : ""}</DialogTitle>
+          <DialogTitle>{t("balance.paymentTitle")} {pendingPayment ? `$${((pendingPayment.amount || 0) + (pendingPayment.bonus ? Math.floor((pendingPayment.amount * pendingPayment.bonus) / 100) : 0)).toLocaleString()}` : ""}</DialogTitle>
           <DialogDescription>{t("balance.paymentDesc")}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 mt-2">
