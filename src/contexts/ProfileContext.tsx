@@ -27,7 +27,12 @@ interface ProfileContextType {
 
 const ProfileContext = createContext<ProfileContextType | null>(null);
 
-function fromApi(u: ApiUser, id: string): Profile {
+function fromApi(u: ApiUser, id: string, prev?: Profile | null): Profile {
+  // Backend may use either `campaign_balanse_notifications` (typo) or
+  // `campaign_balance_notifications`. Accept both, fall back to previous value.
+  const budgetRaw =
+    (u as any).campaign_balanse_notifications ??
+    (u as any).campaign_balance_notifications;
   return {
     id,
     email: u.mail,
@@ -38,7 +43,8 @@ function fromApi(u: ApiUser, id: string): Profile {
     balanceThreshold: Number(u.balance_treshold) || 100,
     notifyCampaignStatus: u.campaign_status_notifications,
     notifyLowBalance: u.low_balance_notifications,
-    notifyCampaignBudget: u.campaign_balanse_notifications,
+    notifyCampaignBudget:
+      typeof budgetRaw === "boolean" ? budgetRaw : prev?.notifyCampaignBudget ?? true,
     managerTelegram: u.manager_telegram || "",
   };
 }
