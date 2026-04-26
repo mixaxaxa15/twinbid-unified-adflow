@@ -359,10 +359,14 @@ export default function DashboardBalance() {
                     const st = statusMap[req.status] || statusMap.pending;
                     let promoLabel: string | null = null;
                     if (req.promocode_id) {
-                      try {
-                        const map = JSON.parse(localStorage.getItem("twinbid_promo_codes") || "{}");
-                        promoLabel = map[req.id] || map[req.promocode_id] || null;
-                      } catch {}
+                      // Prefer the resolved DB name; fall back to the local cache used by submission flow.
+                      promoLabel = promoNames[req.promocode_id] || null;
+                      if (!promoLabel) {
+                        try {
+                          const map = JSON.parse(localStorage.getItem("twinbid_promo_codes") || "{}");
+                          promoLabel = map[req.id] || map[req.promocode_id] || null;
+                        } catch {}
+                      }
                     }
                     const bonusAmt = Math.max(0, Number(req.total_balance_increase || 0) - Number(req.deposit_amount || 0));
                     return (
@@ -372,12 +376,12 @@ export default function DashboardBalance() {
                           {t("balance.topUpVia")} · {methodLabel}
                           {req.promocode_id && (
                             <span className="text-primary ml-1">
-                              ({promoLabel || t("balance.promo.label")}{bonusAmt > 0 ? `, +$${bonusAmt}` : ""})
+                              ({promoLabel || t("balance.promo.label")}{bonusAmt > 0 ? `, +$${fmtMoney(bonusAmt)}` : ""})
                             </span>
                           )}
                         </td>
                         <td className="py-3 px-4 text-sm text-left font-medium text-green-500">
-                          +${Number(req.total_balance_increase || req.deposit_amount).toLocaleString()}
+                          +${fmtMoney(req.total_balance_increase || req.deposit_amount)}
                         </td>
                         <td className="py-3 px-4 text-left">
                           <Badge variant="outline" className={cn("font-normal", st.className)}>
