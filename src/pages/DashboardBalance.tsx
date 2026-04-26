@@ -327,15 +327,27 @@ export default function DashboardBalance() {
                   {visible.map((req) => {
                     const methodLabel = usdtMethods.find(m => m.id === req.payment_method)?.label || req.payment_method;
                     const st = statusMap[req.status] || statusMap.pending;
+                    let promoLabel: string | null = null;
+                    if (req.promocode_id) {
+                      try {
+                        const map = JSON.parse(localStorage.getItem("twinbid_promo_codes") || "{}");
+                        promoLabel = map[req.id] || map[req.promocode_id] || null;
+                      } catch {}
+                    }
+                    const bonusAmt = Math.max(0, Number(req.total_balance_increase || 0) - Number(req.deposit_amount || 0));
                     return (
                       <tr key={req.id} className="border-b border-border/50 hover:bg-muted/50 transition-colors">
                         <td className="py-3 px-4 text-sm">{formatDate(req.created_at)}</td>
                         <td className="py-3 px-4 text-sm">
                           {t("balance.topUpVia")} · {methodLabel}
-                          {req.promocode_id && <span className="text-primary ml-1">({req.promocode_id})</span>}
+                          {req.promocode_id && (
+                            <span className="text-primary ml-1">
+                              ({promoLabel || t("balance.promo.label")}{bonusAmt > 0 ? `, +$${bonusAmt}` : ""})
+                            </span>
+                          )}
                         </td>
                         <td className="py-3 px-4 text-sm text-left font-medium text-green-500">
-                          +${req.deposit_amount.toLocaleString()}
+                          +${Number(req.total_balance_increase || req.deposit_amount).toLocaleString()}
                         </td>
                         <td className="py-3 px-4 text-left">
                           <Badge variant="outline" className={cn("font-normal", st.className)}>
