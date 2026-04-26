@@ -12,7 +12,11 @@ import { useProfile } from "@/contexts/ProfileContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePendingPayment } from "@/contexts/PendingPaymentContext";
 import { api } from "@/api";
+import { supabase } from "@/integrations/supabase/client";
 import type { ApiUserTransaction } from "@/api/types";
+
+const fmtMoney = (n: number | string | null | undefined) =>
+  Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 const amounts = [100, 250, 500, 1000, 5000];
 
