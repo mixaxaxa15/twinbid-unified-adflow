@@ -240,7 +240,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
     goal_total_dollars: c.budget,
     start_ts: startTimestamp(c.startDate),
     end_ts: endTimestamp(c.endDate),
-    active_intervals: [],
+    active_intervals: scheduleToActiveIntervals(c.targeting.schedule),
     ...buildApiTargeting(c.targeting),
   };
 }
@@ -288,7 +288,10 @@ function buildApiCampaignPatch(updates: Partial<Campaign>): Partial<ApiCampaign>
   if (updates.budget !== undefined) p.goal_total_dollars = updates.budget;
   if (updates.startDate !== undefined) p.start_ts = startTimestamp(updates.startDate);
   if (updates.endDate !== undefined) p.end_ts = endTimestamp(updates.endDate);
-  if (updates.targeting !== undefined) Object.assign(p, buildApiTargeting(updates.targeting));
+  if (updates.targeting !== undefined) {
+    Object.assign(p, buildApiTargeting(updates.targeting));
+    p.active_intervals = scheduleToActiveIntervals(updates.targeting.schedule);
+  }
   return p;
 }
 
