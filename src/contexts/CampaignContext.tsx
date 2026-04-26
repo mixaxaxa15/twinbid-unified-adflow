@@ -291,6 +291,12 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
     // Errors here propagate to the caller so the UI can show the real
     // backend message instead of a fake success toast.
     const created = await api.createCampaign(buildApiCampaignBody(c));
+    // Banner creatives need w/h on the creative body itself (backend expectation).
+    let cw: number | null = null, ch: number | null = null;
+    if (c.formatKey === "banner" && c.bannerSize && /^\d+x\d+$/.test(c.bannerSize)) {
+      const [ws, hs] = c.bannerSize.split("x");
+      cw = Number(ws); ch = Number(hs);
+    }
     for (const cr of c.creatives) {
       await api.createCreative(
         created.campaing_id,
@@ -298,6 +304,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
           creative_name: cr.name || "",
           link: cr.url,
           trackers_macros: {},
+          ...(cw && ch ? { w: cw, h: ch } : {}),
           ...(cr.title ? { title: cr.title } : {}),
           ...(cr.description ? { description: cr.description } : {}),
         } as any,
@@ -322,6 +329,15 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
       const existingRaw = await api.readCreatives(id).catch(() => [] as ApiCreative[]);
       const existing: ApiCreative[] = Array.isArray(existingRaw) ? existingRaw : [];
       await Promise.all(existing.map(cr => api.deleteCreative(cr.id)));
+      // Resolve current banner size for w/h on creative body.
+      const current = campaigns.find(c => c.id === id);
+      const formatKey = updates.formatKey ?? current?.formatKey;
+      const bannerSize = updates.bannerSize ?? current?.bannerSize;
+      let cw: number | null = null, ch: number | null = null;
+      if (formatKey === "banner" && bannerSize && /^\d+x\d+$/.test(bannerSize)) {
+        const [ws, hs] = bannerSize.split("x");
+        cw = Number(ws); ch = Number(hs);
+      }
       for (const cr of updates.creatives) {
         await api.createCreative(
           id,
@@ -329,6 +345,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
             creative_name: cr.name || "",
             link: cr.url,
             trackers_macros: {},
+            ...(cw && ch ? { w: cw, h: ch } : {}),
             ...(cr.title ? { title: cr.title } : {}),
             ...(cr.description ? { description: cr.description } : {}),
           } as any,
@@ -338,7 +355,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
       }
     }
     await fetchCampaigns();
-  }, [user, fetchCampaigns]);
+  }, [user, fetchCampaigns, campaigns]);
 
   const deleteCampaign = useCallback(async (id: string) => {
     if (!user) throw new Error("Not authenticated");
