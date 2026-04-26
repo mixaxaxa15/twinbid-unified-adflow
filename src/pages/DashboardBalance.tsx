@@ -91,7 +91,7 @@ export default function DashboardBalance() {
       // Reject if this user already has a *completed/pending* transaction tied to this promo.
       // Ignore created/cancelled transactions which represent abandoned attempts.
       const alreadyUsed = topupRequests.some(
-        (tx) => (tx.promocode_id === promo.id || tx.promocode_id === code)
+        (tx) => tx.promocode_id === promo.id
           && (!user || tx.user_id === user.id)
           && tx.status !== "draft"
           && tx.status !== "cancelled"
