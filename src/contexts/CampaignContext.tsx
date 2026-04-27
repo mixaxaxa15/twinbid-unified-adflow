@@ -88,8 +88,8 @@ function targetingMapToState(m: TargetingMap | undefined): TargetingState {
   return { mode: allWhite ? "white" : "black", items: entries.map(([k]) => k) };
 }
 
-function verticalsToApiArray(verticals: readonly string[] | undefined): string[] {
-  return [...(verticals || [])];
+function verticalsToApiArray(verticals: readonly string[] | undefined): Record<string, 1> {
+  return Object.fromEntries((verticals || []).map(v => [v, 1])) as Record<string, 1>;
 }
 
 const URL_MACRO_TOKENS = [
