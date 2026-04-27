@@ -149,7 +149,7 @@ function readApiTargeting(c: ApiCampaign): Record<string, TargetingState> {
 function mapApiCampaignToUi(c: ApiCampaign, creatives: Creative[]): Campaign {
   const priceValue = c.pricing_model === "cpc" ? c.base_price_cpc : c.base_price_cpm;
   return {
-    id: c.campaing_id,
+    id: c.campaign_id,
     name: c.campaign_name,
     status: c.status,
     format: c.format_type, // human label = key for now
@@ -228,7 +228,7 @@ function endTimestamp(date: string): string | null {
   return `${date}T23:59:59Z`;
 }
 
-function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campaing_id" | "user_id" | "cum_done_dollars"> {
+function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campaign_id" | "user_id" | "cum_done_dollars"> {
   let w: number | null = null, h: number | null = null;
   if (c.bannerSize && /^\d+x\d+$/.test(c.bannerSize)) {
     const [ws, hs] = c.bannerSize.split("x");
@@ -337,10 +337,10 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
       const withCreatives = await Promise.all(items.map(async c => {
         let crs: ApiCreative[] = [];
         try {
-          const r = await api.readCreatives(c.campaing_id);
+          const r = await api.readCreatives(c.campaign_id);
           crs = Array.isArray(r) ? r : [];
         } catch (e) {
-          console.error(`readCreatives failed for ${c.campaing_id}:`, e);
+          console.error(`readCreatives failed for ${c.campaign_id}:`, e);
         }
         return mapApiCampaignToUi(c, crs.map(mapApiCreativeToUi));
       }));
@@ -368,7 +368,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
     }
     for (const cr of c.creatives) {
       await api.createCreative(
-        created.campaing_id,
+        created.campaign_id,
         {
           creative_name: cr.name || "",
           link: cr.url,
@@ -382,7 +382,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
       );
     }
     await fetchCampaigns();
-    return created.campaing_id;
+    return created.campaign_id;
   }, [user, fetchCampaigns]);
 
   const updateCampaign = useCallback(async (id: string, updates: Partial<Campaign>) => {
