@@ -126,6 +126,7 @@ export function CreativesEditor({ formatKey, creatives, onChange, errors = {}, o
   };
 
   return (
+    <>
     <div className="space-y-4">
       {creatives.map((creative, idx) => {
         // Compute active macros for this creative
