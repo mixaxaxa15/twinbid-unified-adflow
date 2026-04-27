@@ -88,8 +88,17 @@ function targetingMapToState(m: TargetingMap | undefined): TargetingState {
   return { mode: allWhite ? "white" : "black", items: entries.map(([k]) => k) };
 }
 
-function verticalsToApiMap(verticals: readonly string[] | undefined): Record<string, 1> {
-  return Object.fromEntries((verticals || []).map(v => [v, 1])) as Record<string, 1>;
+function verticalsToApiArray(verticals: readonly string[] | undefined): string[] {
+  return [...(verticals || [])];
+}
+
+const URL_MACRO_TOKENS = [
+  "click_id", "site_id", "country_code", "creative_id",
+  "campaign_id", "browser", "device", "device_os", "ip_address",
+] as const;
+function extractMacrosFromUrl(url: string | undefined): string[] {
+  if (!url) return [];
+  return URL_MACRO_TOKENS.filter(m => url.includes(`{${m}}`));
 }
 
 const TARGET_KEY_MAP = [
