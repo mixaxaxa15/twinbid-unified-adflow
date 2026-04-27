@@ -41,7 +41,7 @@ export interface ApiCampaign {
   w?: number | null;
   status: CampaignStatus;
   traffic_type: TrafficType;
-  vertical: Record<string, 1>;
+  vertical: string[];
   pricing_model: PricingModel;
   base_price_cpm: number;
   base_price_cpc: number;
@@ -67,7 +67,7 @@ export interface ApiCreativeBase {
   campaign_id: string;
   creative_name: string;
   link: string;
-  trackers_macros: Record<string, 0 | 1>;
+  trackers_macros: string[];
 }
 export interface ApiPopCreative extends ApiCreativeBase {}
 export interface ApiBanCreative extends ApiCreativeBase {

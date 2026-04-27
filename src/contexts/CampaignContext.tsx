@@ -88,8 +88,17 @@ function targetingMapToState(m: TargetingMap | undefined): TargetingState {
   return { mode: allWhite ? "white" : "black", items: entries.map(([k]) => k) };
 }
 
-function verticalsToApiMap(verticals: readonly string[] | undefined): Record<string, 1> {
-  return Object.fromEntries((verticals || []).map(v => [v, 1])) as Record<string, 1>;
+function verticalsToApiArray(verticals: readonly string[] | undefined): string[] {
+  return [...(verticals || [])];
+}
+
+const URL_MACRO_TOKENS = [
+  "click_id", "site_id", "country_code", "creative_id",
+  "campaign_id", "browser", "device", "device_os", "ip_address",
+] as const;
+function extractMacrosFromUrl(url: string | undefined): string[] {
+  if (!url) return [];
+  return URL_MACRO_TOKENS.filter(m => url.includes(`{${m}}`));
 }
 
 const TARGET_KEY_MAP = [
@@ -257,7 +266,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
     h, w,
     status: c.status,
     traffic_type: c.trafficType,
-    vertical: verticalsToApiMap(c.verticals),
+    vertical: verticalsToApiArray(c.verticals),
     pricing_model: c.pricingModel,
     base_price_cpm: c.pricingModel === "cpm" ? c.priceValue : 0,
     base_price_cpc: c.pricingModel === "cpc" ? c.priceValue : 0,
@@ -294,7 +303,7 @@ function buildApiCampaignPatch(updates: Partial<Campaign>): Partial<ApiCampaign>
   }
   if (updates.status !== undefined) p.status = updates.status;
   if (updates.trafficType !== undefined) p.traffic_type = updates.trafficType;
-  if (updates.verticals !== undefined) p.vertical = verticalsToApiMap(updates.verticals);
+  if (updates.verticals !== undefined) p.vertical = verticalsToApiArray(updates.verticals);
   if (updates.pricingModel !== undefined || updates.priceValue !== undefined) {
     // Both fields cooperate; require pricingModel to know which slot.
     const pm = updates.pricingModel;
@@ -388,7 +397,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
         {
           creative_name: cr.name || "",
           link: cr.url,
-          trackers_macros: {},
+          trackers_macros: extractMacrosFromUrl(cr.url),
           ...(cw && ch ? { w: cw, h: ch } : {}),
           ...(cr.title ? { title: cr.title } : {}),
           ...(cr.description ? { description: cr.description } : {}),
@@ -446,7 +455,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
           {
             creative_name: cr.name || "",
             link: cr.url,
-            trackers_macros: {},
+            trackers_macros: extractMacrosFromUrl(cr.url),
             ...(cw && ch ? { w: cw, h: ch } : {}),
             ...(cr.title ? { title: cr.title } : {}),
             ...(cr.description ? { description: cr.description } : {}),
