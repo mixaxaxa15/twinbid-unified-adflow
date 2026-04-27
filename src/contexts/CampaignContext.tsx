@@ -13,6 +13,16 @@ export type TrafficQuality = "common" | "high" | "ultra";
 export type ListMode = "none" | "white" | "black";
 export type TrafficType = ApiTraffic;
 
+type ApiQuality = ApiCampaign["quality_type"];
+const uiQualityToApi = (q: TrafficQuality): ApiQuality =>
+  q === "common" ? "usual" : q === "high" ? "high_quality" : "ultra_high_quality";
+const apiQualityToUi = (q: ApiQuality | string | undefined): TrafficQuality => {
+  if (q === "usual" || q === "common") return "common";
+  if (q === "high_quality" || q === "high") return "high";
+  if (q === "ultra_high_quality" || q === "ultra") return "ultra";
+  return "common";
+};
+
 export interface TargetingState {
   mode: ListMode;
   items: string[];
