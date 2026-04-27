@@ -171,7 +171,9 @@ function mapApiCampaignToUi(c: ApiCampaign, creatives: Creative[]): Campaign {
     bannerSize: c.w && c.h ? `${c.w}x${c.h}` : undefined,
     brandName: c.brand_name || undefined,
     trafficType: c.traffic_type,
-    verticals: (c.vertical || []) as Vertical[],
+    verticals: (c.vertical && typeof c.vertical === "object" && !Array.isArray(c.vertical)
+      ? Object.entries(c.vertical).filter(([, v]) => v === 1).map(([k]) => k)
+      : Array.isArray(c.vertical) ? (c.vertical as unknown as string[]) : []) as Vertical[],
     description: undefined,
   };
 }
