@@ -260,7 +260,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
     start_ts: startTimestamp(c.startDate),
     end_ts: endTimestamp(c.endDate),
     active_intervals: scheduleToActiveIntervals(c.targeting.schedule),
-    quality_type: c.trafficQuality,
+    quality_type: uiQualityToApi(c.trafficQuality),
     ...buildApiTargeting(c.targeting),
   };
 }
