@@ -395,7 +395,6 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
     if (updates.creatives !== undefined) {
       const existingRaw = await api.readCreatives(id).catch(() => [] as ApiCreative[]);
       const existing: ApiCreative[] = Array.isArray(existingRaw) ? existingRaw : [];
-      await Promise.all(existing.map(cr => api.deleteCreative(cr.id)));
       // Resolve current banner size for w/h on creative body.
       const current = campaigns.find(c => c.id === id);
       const formatKey = updates.formatKey ?? current?.formatKey;
