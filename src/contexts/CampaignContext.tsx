@@ -171,7 +171,9 @@ function mapApiCampaignToUi(c: ApiCampaign, creatives: Creative[]): Campaign {
     bannerSize: c.w && c.h ? `${c.w}x${c.h}` : undefined,
     brandName: c.brand_name || undefined,
     trafficType: c.traffic_type,
-    verticals: (c.vertical || []) as Vertical[],
+    verticals: (c.vertical && typeof c.vertical === "object" && !Array.isArray(c.vertical)
+      ? Object.entries(c.vertical).filter(([, v]) => v === 1).map(([k]) => k)
+      : Array.isArray(c.vertical) ? (c.vertical as unknown as string[]) : []) as Vertical[],
     description: undefined,
   };
 }
@@ -239,7 +241,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
     h, w,
     status: c.status,
     traffic_type: c.trafficType,
-    vertical: c.verticals,
+    vertical: Object.fromEntries((c.verticals || []).map(v => [v, 1])) as Record<string, 0 | 1>,
     pricing_model: c.pricingModel,
     base_price_cpm: c.pricingModel === "cpm" ? c.priceValue : 0,
     base_price_cpc: c.pricingModel === "cpc" ? c.priceValue : 0,
@@ -276,7 +278,7 @@ function buildApiCampaignPatch(updates: Partial<Campaign>): Partial<ApiCampaign>
   }
   if (updates.status !== undefined) p.status = updates.status;
   if (updates.trafficType !== undefined) p.traffic_type = updates.trafficType;
-  if (updates.verticals !== undefined) p.vertical = updates.verticals;
+  if (updates.verticals !== undefined) p.vertical = Object.fromEntries(updates.verticals.map(v => [v, 1])) as Record<string, 0 | 1>;
   if (updates.pricingModel !== undefined || updates.priceValue !== undefined) {
     // Both fields cooperate; require pricingModel to know which slot.
     const pm = updates.pricingModel;
