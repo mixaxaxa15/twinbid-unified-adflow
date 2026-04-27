@@ -88,6 +88,10 @@ function targetingMapToState(m: TargetingMap | undefined): TargetingState {
   return { mode: allWhite ? "white" : "black", items: entries.map(([k]) => k) };
 }
 
+function verticalsToApiMap(verticals: readonly string[] | undefined): Record<string, 1> {
+  return Object.fromEntries((verticals || []).map(v => [v, 1])) as Record<string, 1>;
+}
+
 const TARGET_KEY_MAP = [
   ["country", "country"], ["language", "language"], ["deviceType", "device_type"],
   ["os", "os"], ["browser", "browser"], ["sites", "site_id"], ["ip", "ip"],
@@ -253,7 +257,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
     h, w,
     status: c.status,
     traffic_type: c.trafficType,
-    vertical: [...(c.verticals || [])] as string[],
+    vertical: verticalsToApiMap(c.verticals),
     pricing_model: c.pricingModel,
     base_price_cpm: c.pricingModel === "cpm" ? c.priceValue : 0,
     base_price_cpc: c.pricingModel === "cpc" ? c.priceValue : 0,
@@ -290,7 +294,7 @@ function buildApiCampaignPatch(updates: Partial<Campaign>): Partial<ApiCampaign>
   }
   if (updates.status !== undefined) p.status = updates.status;
   if (updates.trafficType !== undefined) p.traffic_type = updates.trafficType;
-  if (updates.verticals !== undefined) p.vertical = [...updates.verticals] as string[];
+  if (updates.verticals !== undefined) p.vertical = verticalsToApiMap(updates.verticals);
   if (updates.pricingModel !== undefined || updates.priceValue !== undefined) {
     // Both fields cooperate; require pricingModel to know which slot.
     const pm = updates.pricingModel;
