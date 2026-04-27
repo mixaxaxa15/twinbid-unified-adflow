@@ -41,7 +41,7 @@ export interface ApiCampaign {
   w?: number | null;
   status: CampaignStatus;
   traffic_type: TrafficType;
-  vertical: Record<string, 0 | 1>;
+  vertical: string[];
   pricing_model: PricingModel;
   base_price_cpm: number;
   base_price_cpc: number;
