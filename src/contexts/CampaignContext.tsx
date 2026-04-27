@@ -203,6 +203,13 @@ function mapApiCreativeToUi(cr: ApiCreative): Creative {
   };
 }
 
+async function downloadCreativeImage(imageUrl: string, filename: string): Promise<File> {
+  const resp = await fetch(imageUrl);
+  if (!resp.ok) throw new Error(`Failed to download creative image: HTTP ${resp.status}`);
+  const blob = await resp.blob();
+  return new File([blob], filename, { type: blob.type || "image/jpeg" });
+}
+
 /**
  * Convert a `YYYY-MM-DD` form value into the timestamps the backend expects.
  * Returns `null` for empty values — the backend's Go time parser rejects "" with
