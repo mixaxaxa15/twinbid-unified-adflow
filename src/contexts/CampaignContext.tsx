@@ -278,7 +278,7 @@ function buildApiCampaignPatch(updates: Partial<Campaign>): Partial<ApiCampaign>
   }
   if (updates.status !== undefined) p.status = updates.status;
   if (updates.trafficType !== undefined) p.traffic_type = updates.trafficType;
-  if (updates.verticals !== undefined) p.vertical = updates.verticals;
+  if (updates.verticals !== undefined) p.vertical = Object.fromEntries(updates.verticals.map(v => [v, 1])) as Record<string, 0 | 1>;
   if (updates.pricingModel !== undefined || updates.priceValue !== undefined) {
     // Both fields cooperate; require pricingModel to know which slot.
     const pm = updates.pricingModel;
