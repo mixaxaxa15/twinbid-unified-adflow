@@ -32,7 +32,7 @@ export interface ApiUser {
 }
 
 export interface ApiCampaign {
-  campaing_id: string;
+  campaign_id: string;
   user_id: string;
   campaign_name: string;
   format_type: FormatType;
@@ -59,7 +59,7 @@ export interface ApiCampaign {
   browser: TargetingMap;
   site_id: TargetingMap;
   ip: TargetingMap;
-  quality_type?: "common" | "high" | "ultra";
+  quality_type: "common" | "high" | "ultra";
 }
 
 export interface ApiCreativeBase {
