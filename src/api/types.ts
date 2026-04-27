@@ -67,7 +67,7 @@ export interface ApiCreativeBase {
   campaign_id: string;
   creative_name: string;
   link: string;
-  trackers_macros: string[];
+  trackers_macros: Record<string, 0 | 1>;
 }
 export interface ApiPopCreative extends ApiCreativeBase {}
 export interface ApiBanCreative extends ApiCreativeBase {
