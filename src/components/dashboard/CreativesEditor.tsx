@@ -243,5 +243,13 @@ export function CreativesEditor({ formatKey, creatives, onChange, errors = {}, o
         </Button>
       )}
     </div>
+    <Dialog open={!!previewUrl} onOpenChange={(o) => { if (!o) setPreviewUrl(null); }}>
+      <DialogContent className="max-w-4xl p-2 bg-card border-border">
+        {previewUrl && (
+          <img src={previewUrl} alt="Preview" className="w-full h-auto max-h-[85vh] object-contain rounded" />
+        )}
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }
