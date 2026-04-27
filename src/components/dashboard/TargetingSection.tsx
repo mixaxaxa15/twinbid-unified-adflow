@@ -267,7 +267,7 @@ function SitesInput({ items, onAdd, t }: { items: string[]; onAdd: (items: strin
       <p className="text-xs text-muted-foreground">{t("targeting.sitesHint")}</p>
       <div className="flex gap-2">
         <Input value={value} onChange={e => setValue(e.target.value)}
-          placeholder="'12345','abdjhx'" className="bg-background border-border flex-1"
+          placeholder="12345,abdjhx" className="bg-background border-border flex-1"
           onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }} />
         <Button type="button" size="icon" variant="outline" onClick={handleAdd} className="border-border shrink-0">
           <Plus className="h-4 w-4" />
