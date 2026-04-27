@@ -223,7 +223,9 @@ export function CreativesEditor({ formatKey, creatives, onChange, errors = {}, o
                   {creative.imageFileName && <span className="text-sm text-muted-foreground">{creative.imageFileName}</span>}
                 </div>
                 {creative.imageUrl && (
-                  <img src={creative.imageUrl} alt="Preview" className="mt-2 max-h-32 rounded border border-border" />
+                  <button type="button" onClick={() => setPreviewUrl(creative.imageUrl!)} className="block">
+                    <img src={creative.imageUrl} alt="Preview" className="mt-2 max-h-32 rounded border border-border cursor-zoom-in hover:opacity-90 transition-opacity" />
+                  </button>
                 )}
                 {errors[`creative_${creative.id}_image`] && <p className="text-xs text-destructive">{errors[`creative_${creative.id}_image`]}</p>}
               </div>
