@@ -252,7 +252,7 @@ function SitesInput({ items, onAdd, t }: { items: string[]; onAdd: (items: strin
   const handleAdd = () => {
     const raw = value.trim();
     if (!raw) return;
-    if (/\s/.test(raw) || raw.includes('"') || raw.includes("'")) {
+    if (/\s/.test(raw)) {
       toast.error(t("targeting.sitesFormatError"));
       return;
     }
