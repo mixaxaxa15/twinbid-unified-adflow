@@ -96,9 +96,10 @@ const URL_MACRO_TOKENS = [
   "click_id", "site_id", "country_code", "creative_id",
   "campaign_id", "browser", "device", "device_os", "ip_address",
 ] as const;
-function extractMacrosFromUrl(url: string | undefined): string[] {
-  if (!url) return [];
-  return URL_MACRO_TOKENS.filter(m => url.includes(`{${m}}`));
+function extractMacrosFromUrl(url: string | undefined): Record<string, 0 | 1> {
+  return Object.fromEntries(
+    URL_MACRO_TOKENS.map(m => [m, (url && url.includes(`{${m}}`)) ? 1 : 0])
+  ) as Record<string, 0 | 1>;
 }
 
 const TARGET_KEY_MAP = [
