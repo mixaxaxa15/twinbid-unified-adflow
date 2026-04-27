@@ -404,27 +404,22 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
         const [ws, hs] = bannerSize.split("x");
         cw = Number(ws); ch = Number(hs);
       }
-      for (const cr of updates.creatives) {
-        // If user did not pick a new file, but the creative still has an
-        // imageUrl from the previous backend (presigned S3 URL), download
-        // it and re-send it as a File so the backend keeps the image.
+      const preparedCreatives = await Promise.all(updates.creatives.map(async cr => {
         let fileToSend: File | undefined = cr.pendingFile;
         let filenameToSend: string | undefined = cr.pendingFile
           ? (cr.imageFileName || cr.pendingFile.name)
           : undefined;
         if (!fileToSend && cr.imageUrl && /^https?:\/\//i.test(cr.imageUrl)) {
-          try {
-            const resp = await fetch(cr.imageUrl);
-            if (resp.ok) {
-              const blob = await resp.blob();
-              const fname = cr.imageFileName || "image.jpg";
-              fileToSend = new File([blob], fname, { type: blob.type || "image/jpeg" });
-              filenameToSend = fname;
-            }
-          } catch (err) {
-            console.warn("Failed to re-fetch existing creative image:", err);
-          }
+          const fname = cr.imageFileName || fileNameFromPath(cr.imageUrl) || "image.jpg";
+          fileToSend = await downloadCreativeImage(cr.imageUrl, fname);
+          filenameToSend = fname;
         }
+        return { cr, fileToSend, filenameToSend };
+      }));
+
+      await Promise.all(existing.map(cr => api.deleteCreative(cr.id)));
+
+      for (const { cr, fileToSend, filenameToSend } of preparedCreatives) {
         await api.createCreative(
           id,
           {
