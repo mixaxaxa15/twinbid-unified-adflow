@@ -397,7 +397,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
         {
           creative_name: cr.name || "",
           link: cr.url,
-          trackers_macros: {},
+          trackers_macros: extractMacrosFromUrl(cr.url),
           ...(cw && ch ? { w: cw, h: ch } : {}),
           ...(cr.title ? { title: cr.title } : {}),
           ...(cr.description ? { description: cr.description } : {}),
@@ -455,7 +455,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
           {
             creative_name: cr.name || "",
             link: cr.url,
-            trackers_macros: {},
+            trackers_macros: extractMacrosFromUrl(cr.url),
             ...(cw && ch ? { w: cw, h: ch } : {}),
             ...(cr.title ? { title: cr.title } : {}),
             ...(cr.description ? { description: cr.description } : {}),
