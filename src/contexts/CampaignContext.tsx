@@ -13,6 +13,16 @@ export type TrafficQuality = "common" | "high" | "ultra";
 export type ListMode = "none" | "white" | "black";
 export type TrafficType = ApiTraffic;
 
+type ApiQuality = ApiCampaign["quality_type"];
+const uiQualityToApi = (q: TrafficQuality): ApiQuality =>
+  q === "common" ? "usual" : q === "high" ? "high_quality" : "ultra_high_quality";
+const apiQualityToUi = (q: ApiQuality | string | undefined): TrafficQuality => {
+  if (q === "usual" || q === "common") return "common";
+  if (q === "high_quality" || q === "high") return "high";
+  if (q === "ultra_high_quality" || q === "ultra") return "ultra";
+  return "common";
+};
+
 export interface TargetingState {
   mode: ListMode;
   items: string[];
@@ -162,7 +172,7 @@ function mapApiCampaignToUi(c: ApiCampaign, creatives: Creative[]): Campaign {
     ctr: 0,
     pricingModel: c.pricing_model,
     priceValue: Number(priceValue) || 0,
-    trafficQuality: (c.quality_type as TrafficQuality) || "common",
+    trafficQuality: apiQualityToUi(c.quality_type),
     startDate: c.start_ts ? c.start_ts.slice(0, 10) : "",
     endDate: c.end_ts ? c.end_ts.slice(0, 10) : "",
     creatives,
@@ -250,7 +260,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
     start_ts: startTimestamp(c.startDate),
     end_ts: endTimestamp(c.endDate),
     active_intervals: scheduleToActiveIntervals(c.targeting.schedule),
-    quality_type: c.trafficQuality,
+    quality_type: uiQualityToApi(c.trafficQuality),
     ...buildApiTargeting(c.targeting),
   };
 }
@@ -295,7 +305,7 @@ function buildApiCampaignPatch(updates: Partial<Campaign>): Partial<ApiCampaign>
     }
   }
   if (updates.evenSpend !== undefined) p.evenness_by_slot_mode = updates.evenSpend;
-  if (updates.trafficQuality !== undefined) p.quality_type = updates.trafficQuality;
+  if (updates.trafficQuality !== undefined) p.quality_type = uiQualityToApi(updates.trafficQuality);
   if (updates.budget !== undefined) p.goal_total_dollars = updates.budget;
   if (updates.startDate !== undefined) p.start_ts = startTimestamp(updates.startDate);
   if (updates.endDate !== undefined) p.end_ts = endTimestamp(updates.endDate);

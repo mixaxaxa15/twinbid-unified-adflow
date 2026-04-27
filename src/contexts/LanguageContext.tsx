@@ -413,7 +413,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "budget.totalBudgetHint": { ru: "Обязательное поле. Минимум $1", en: "Required field. Minimum $1" },
   "budget.dailyBudget": { ru: "Дневной бюджет", en: "Daily budget" },
   "budget.dailyBudgetPlaceholder": { ru: "Без ограничений", en: "No limit" },
-  "budget.trafficType": { ru: "Тип трафика *", en: "Traffic type *" },
+  "budget.trafficType": { ru: "Уровень фильтрации трафика *", en: "Traffic filtering level *" },
   "budget.trafficCommon": { ru: "Фильтрация на стороне партнёра + фильтрация TwinBid. Базовый сегмент: хорошие объёмы при контроле качества.", en: "Partner-side filtering + TwinBid filtering. Base segment: good volumes with quality control." },
   "budget.trafficHigh": { ru: "Жёсткие фильтры у партнёра + усиленная фильтрация TwinBid. Меньше объёмов, но минимальная вероятность фрода.", en: "Strict partner filters + enhanced TwinBid filtering. Lower volumes but minimal fraud probability." },
   "budget.trafficUltra": { ru: "Фильтры партнёра + фильтрация TwinBid + сторонние fraud-checker системы. Максимальная глубина проверки и защита от фрода.", en: "Partner filters + TwinBid filtering + third-party fraud-checker systems. Maximum verification depth and fraud protection." },
