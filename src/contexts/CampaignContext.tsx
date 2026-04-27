@@ -162,7 +162,7 @@ function mapApiCampaignToUi(c: ApiCampaign, creatives: Creative[]): Campaign {
     ctr: 0,
     pricingModel: c.pricing_model,
     priceValue: Number(priceValue) || 0,
-    trafficQuality: (c.quality_type as TrafficQuality) || "common",
+    trafficQuality: apiQualityToUi(c.quality_type),
     startDate: c.start_ts ? c.start_ts.slice(0, 10) : "",
     endDate: c.end_ts ? c.end_ts.slice(0, 10) : "",
     creatives,
