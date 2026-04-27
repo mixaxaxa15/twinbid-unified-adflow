@@ -42,6 +42,7 @@ export function CreativesEditor({ formatKey, creatives, onChange, errors = {}, o
   const { t } = useLanguage();
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const showTitle = formatKey === "native" || formatKey === "push";
   const showDescription = formatKey === "native" || formatKey === "push";
