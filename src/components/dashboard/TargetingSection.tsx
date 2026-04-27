@@ -268,6 +268,7 @@ function SitesInput({ items, onAdd, t }: { items: string[]; onAdd: (items: strin
       <div className="flex gap-2">
         <Input value={value} onChange={e => setValue(e.target.value)}
           placeholder="12345,abdjhx" className="bg-background border-border flex-1"
+          onBlur={() => { if (value.trim()) handleAdd(); }}
           onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }} />
         <Button type="button" size="icon" variant="outline" onClick={handleAdd} className="border-border shrink-0">
           <Plus className="h-4 w-4" />
@@ -307,6 +308,7 @@ function IpInput({ items, onAdd, t }: { items: string[]; onAdd: (newItems: strin
       <div className="flex gap-2">
         <Input value={value} onChange={e => setValue(e.target.value)}
           placeholder="192.168.1.1, 10.0.0.1" className="bg-background border-border flex-1"
+          onBlur={() => { if (value.trim()) handleAdd(); }}
           onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }} />
         <Button type="button" size="icon" variant="outline" onClick={handleAdd} className="border-border shrink-0">
           <Plus className="h-4 w-4" />
