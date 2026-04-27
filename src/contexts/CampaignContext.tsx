@@ -241,7 +241,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
     h, w,
     status: c.status,
     traffic_type: c.trafficType,
-    vertical: c.verticals,
+    vertical: Object.fromEntries((c.verticals || []).map(v => [v, 1])) as Record<string, 0 | 1>,
     pricing_model: c.pricingModel,
     base_price_cpm: c.pricingModel === "cpm" ? c.priceValue : 0,
     base_price_cpc: c.pricingModel === "cpc" ? c.priceValue : 0,
