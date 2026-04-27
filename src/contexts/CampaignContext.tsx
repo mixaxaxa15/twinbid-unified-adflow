@@ -395,6 +395,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
     if (updates.creatives !== undefined) {
       const existingRaw = await api.readCreatives(id).catch(() => [] as ApiCreative[]);
       const existing: ApiCreative[] = Array.isArray(existingRaw) ? existingRaw : [];
+      const existingById = new Map(existing.map(cr => [cr.id, cr]));
       // Resolve current banner size for w/h on creative body.
       const current = campaigns.find(c => c.id === id);
       const formatKey = updates.formatKey ?? current?.formatKey;
@@ -409,9 +410,11 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
         let filenameToSend: string | undefined = cr.pendingFile
           ? (cr.imageFileName || cr.pendingFile.name)
           : undefined;
-        if (!fileToSend && cr.imageUrl && /^https?:\/\//i.test(cr.imageUrl)) {
-          const fname = cr.imageFileName || fileNameFromPath(cr.imageUrl) || "image.jpg";
-          fileToSend = await downloadCreativeImage(cr.imageUrl, fname);
+        const existingCreative = existingById.get(cr.id) as (ApiCreative & { name?: string; presigned_s3_url?: string }) | undefined;
+        const sourceImageUrl = existingCreative?.presigned_s3_url || cr.imageUrl;
+        if (!fileToSend && sourceImageUrl && /^https?:\/\//i.test(sourceImageUrl)) {
+          const fname = cr.imageFileName || existingCreative?.name || fileNameFromPath(sourceImageUrl) || "image.jpg";
+          fileToSend = await downloadCreativeImage(sourceImageUrl, fname);
           filenameToSend = fname;
         }
         return { cr, fileToSend, filenameToSend };
