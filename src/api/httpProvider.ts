@@ -53,6 +53,20 @@ export const httpProvider: RawApiProvider = {
   logout: ()     => http<ApiEnvelope<void>>        ("/api/auth/logout", { method: "POST" }),
   getSession:    () => http<ApiEnvelope<{ user_id: string; email: string; full_name: string } | null>>("/api/auth/session"),
   changePassword:(body) => http<ApiEnvelope<void>>("/api/auth/password", { method: "POST", body }),
+  verifyEmail: async (body) => {
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/verify`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (res.status === 200) return { success: true, errorMsg: "", data: "success" };
+      if (res.status === 409) return { success: true, errorMsg: "", data: "already" };
+      return { success: true, errorMsg: "", data: "invalid" };
+    } catch {
+      return { success: true, errorMsg: "", data: "invalid" };
+    }
+  },
 
   // profile
   getProfile:   ()     => http<ApiEnvelope<ApiUser>>("/api/profile"),
