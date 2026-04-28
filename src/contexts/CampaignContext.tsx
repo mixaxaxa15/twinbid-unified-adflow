@@ -478,7 +478,7 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
           id,
           {
             creative_name: cr.name || "",
-            link: cr.url,
+            link: stripMacrosFromUrl(cr.url),
             trackers_macros: extractMacrosFromUrl(cr.url),
             ...(cw && ch ? { w: cw, h: ch } : {}),
             ...(cr.title ? { title: cr.title } : {}),
