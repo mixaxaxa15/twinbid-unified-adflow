@@ -69,16 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser({ id: "mock-user", email: res.user.mail, full_name: res.user.name });
       return { error: null };
     } catch (e: any) {
-      const raw = (e?.message || "").toString();
-      const lower = raw.toLowerCase();
-      const lang = (typeof navigator !== "undefined" && navigator.language || "").toLowerCase().startsWith("ru") ? "ru" : "en";
-      if (/user.*(not found|does not exist|doesn't exist)|no such user|not.*registered|не найден|не существует/.test(lower)) {
-        return { error: lang === "ru" ? "Пользователь не существует" : "User does not exist" };
-      }
-      if (/invalid.*(credentials|password|login|email)|wrong.*(password|login|credentials)|incorrect|неверн/.test(lower)) {
-        return { error: lang === "ru" ? "Неверный логин или пароль" : "Invalid login or password" };
-      }
-      return { error: raw || (lang === "ru" ? "Ошибка входа" : "Sign in failed") };
+      return { error: e?.message || "Sign in failed" };
     }
   };
 
