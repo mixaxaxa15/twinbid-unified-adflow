@@ -22,6 +22,7 @@ import DashboardBalance from "./pages/DashboardBalance";
 import DashboardSettings from "./pages/DashboardSettings";
 import CreateCampaign from "./pages/CreateCampaign";
 import EditCampaign from "./pages/EditCampaign";
+import Verify from "./pages/Verify";
 
 const queryClient = new QueryClient();
 
