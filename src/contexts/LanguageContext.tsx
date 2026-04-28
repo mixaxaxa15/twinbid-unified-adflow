@@ -107,7 +107,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "verify.already.title": { ru: "Аккаунт уже подтверждён", en: "Account already confirmed" },
   "verify.already.desc": { ru: "Этот аккаунт уже был подтверждён ранее.", en: "This account has already been confirmed." },
   "verify.invalid.title": { ru: "Недействительная ссылка", en: "Invalid link" },
-  "verify.invalid.desc": { ru: "Ссылка для подтверждения недействительна или устарела.", en: "The confirmation link is invalid or expired." },
+  "verify.invalid.desc": { ru: "Ссылка для подтверждения недействительна или устарела, пройдите регистрацию заново.", en: "The confirmation link is invalid or expired, please sign up again." },
   "verify.goHome": { ru: "На главную", en: "Go home" },
   "verify.goLogin": { ru: "Войти", en: "Sign in" },
 
