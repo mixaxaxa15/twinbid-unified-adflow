@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { api } from "@/api";
+import { api, ApiError } from "@/api";
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/api/config";
 import { DEFAULT_MANAGER_TELEGRAM } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 /** Minimal user shape consumed by the rest of the UI. */
 export interface AuthUser {
