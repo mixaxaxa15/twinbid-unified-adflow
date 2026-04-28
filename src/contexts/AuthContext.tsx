@@ -71,7 +71,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser({ id: "mock-user", email: res.user.mail, full_name: res.user.name });
       return { error: null };
     } catch (e: any) {
-      return { error: e?.message || "Sign in failed" };
+      if (e instanceof ApiError) {
+        if (e.status === 403) return { error: t("auth.error.confirmEmail") };
+        if (e.status === 401 || e.status === 404) return { error: t("auth.error.invalidCredentials") };
+      }
+      return { error: e?.message || t("auth.error.loginFailed") };
     }
   };
 
