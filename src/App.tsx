@@ -41,6 +41,7 @@ const App = () => (
                   <StatisticsProvider>
                     <Routes>
                       <Route path="/" element={<Index />} />
+                      <Route path="/verify" element={<Verify />} />
                       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
                         <Route index element={<DashboardOverview />} />
                         <Route path="campaigns" element={<DashboardCampaigns />} />
