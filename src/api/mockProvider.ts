@@ -126,8 +126,8 @@ export const mockProvider = {
   async changePassword(_body: { new_password: string }): Promise<ApiEnvelope<void>> {
     return ok(undefined as unknown as void);
   },
-  async verifyEmail(_body: { token: string }): Promise<ApiEnvelope<"success" | "already" | "invalid">> {
-    return ok("success");
+  async verifyEmail(_body: { token: string }): Promise<ApiEnvelope<void>> {
+    return ok(undefined as unknown as void);
   },
 
   // -- profile ------------------------------------------------------------

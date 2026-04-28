@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { CheckCircle2, AlertTriangle, XCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { api } from "@/api";
+import { api, ApiError } from "@/api";
 
 type VerifyState = "loading" | "success" | "already" | "invalid";
 
@@ -21,10 +21,12 @@ export default function Verify() {
     }
     (async () => {
       try {
-        const result = await api.verifyEmail({ token });
-        if (!cancelled) setState(result);
-      } catch {
-        if (!cancelled) setState("invalid");
+        await api.verifyEmail({ token });
+        if (!cancelled) setState("success");
+      } catch (e) {
+        if (cancelled) return;
+        if (e instanceof ApiError && e.status === 409) setState("already");
+        else setState("invalid");
       }
     })();
     return () => { cancelled = true; };
