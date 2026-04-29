@@ -278,6 +278,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "campaigns.draftsFilter": { ru: "Черновики", en: "Drafts" },
   "campaigns.moderationFilter": { ru: "На модерации", en: "In moderation" },
   "campaigns.completedFilter": { ru: "Завершённые", en: "Completed" },
+  "campaigns.noBudgetFilter": { ru: "Нет бюджета", en: "No budget" },
   "campaigns.total": { ru: "Всего", en: "Total" },
   "campaigns.activeCount": { ru: "Активных", en: "Active" },
   "campaigns.budget": { ru: "Бюджет", en: "Budget" },
