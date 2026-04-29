@@ -245,7 +245,7 @@ export default function DashboardCampaigns() {
                             {campaign.status === "active" && (
                               <DropdownMenuItem className="gap-2" onClick={() => toggleStatus(campaign.id)}><Pause className="h-4 w-4" /> {t("campaigns.pause")}</DropdownMenuItem>
                             )}
-                            {campaign.status === "paused" && (
+                            {(campaign.status === "paused" || campaign.status === "no_budget") && (
                               <DropdownMenuItem className="gap-2" onClick={() => toggleStatus(campaign.id)}><Play className="h-4 w-4" /> {t("campaigns.start")}</DropdownMenuItem>
                             )}
                             {campaign.status === "draft" && (
