@@ -26,7 +26,7 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
   const [regConfirm, setRegConfirm] = useState("");
   const [regConsent, setRegConsent] = useState(false);
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { signIn, signUp } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
