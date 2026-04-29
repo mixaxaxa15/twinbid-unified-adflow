@@ -122,7 +122,28 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
                 <Input id="password-confirm" type="password" placeholder="••••••••" className="bg-background border-border"
                   value={regConfirm} onChange={(e) => setRegConfirm(e.target.value)} required />
               </div>
-              <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading}>
+              <div className="flex items-start gap-2 pt-1">
+                <Checkbox
+                  id="reg-consent"
+                  checked={regConsent}
+                  onCheckedChange={(v) => setRegConsent(v === true)}
+                  className="mt-0.5"
+                />
+                <Label htmlFor="reg-consent" className="text-xs leading-snug font-normal text-muted-foreground cursor-pointer">
+                  {t("lang") === "ru" ? "Я ознакомлен(а) и согласен(на) с " : "I have read and agree to the "}
+                  <Link to="/legal#terms" target="_blank" className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
+                    {t("auth.consent.terms")}
+                  </Link>
+                  {" "}{t("lang") === "ru" ? "и" : "and"}{" "}
+                  <Link to="/legal#privacy" target="_blank" className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
+                    {t("auth.consent.privacy")}
+                  </Link>
+                  {t("lang") === "ru"
+                    ? ", а также даю согласие на обработку моих персональных данных"
+                    : ", and I consent to the processing of my personal data"}
+                </Label>
+              </div>
+              <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading || !regConsent}>
                 {loading ? "..." : t("auth.registerBtn")}
               </Button>
             </form>
