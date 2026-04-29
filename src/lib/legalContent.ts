@@ -200,8 +200,8 @@ const EN: LegalContent = {
           "To create and maintain a user account.",
           "To identify the user within the TwinBid service.",
           "To communicate with the user regarding their account, requests, or use of the service.",
-          "To send service notifications related to advertising campaigns.",
-          "To send informational messages about TwinBid, if the user has provided consent.",
+          "To send service notifications related to advertising campaigns, including notifications about campaign status, moderation, completion, or other campaign-related events.",
+          "To send informational messages about TwinBid, its services, updates, features, and platform-related announcements, if the user has provided consent to receive such communications.",
           "To provide technical support.",
           "To ensure the security and proper operation of the website and service.",
         ],
@@ -217,12 +217,17 @@ const EN: LegalContent = {
         ],
       },
       {
+        paragraphs: [
+          "Where required by applicable law, TwinBid requests separate consent for the processing of personal data and separate consent for receiving informational or marketing communications.",
+        ],
+      },
+      {
         heading: "5. Informational and Marketing Communications",
         paragraphs: ["TwinBid may use the user's email address to send:"],
         list: [
           "Service notifications related to the user's account and advertising campaigns.",
           "Notifications about campaign completion, moderation, status changes, or other service-related events.",
-          "Informational messages about TwinBid updates, services, features, or offers, if the user has agreed to receive such messages.",
+          "Informational messages about TwinBid updates, services, features, or offers.",
         ],
       },
       {
@@ -249,6 +254,12 @@ const EN: LegalContent = {
           "Hosting providers.",
           "Analytics or technical infrastructure providers.",
           "Customer support tools.",
+        ],
+      },
+      {
+        paragraphs: [
+          "Such third parties may process personal data only to the extent necessary to provide their services to TwinBid.",
+          "TwinBid may also disclose personal data if required by applicable law, court order, or lawful request from competent authorities.",
         ],
       },
       {
@@ -288,8 +299,7 @@ const EN: LegalContent = {
       {
         heading: "12. Changes to this Privacy Policy",
         paragraphs: [
-          "TwinBid may update this Privacy Policy from time to time. The updated version will be published on the website https://twinbid.io/.",
-          "Continued use of the website or service after changes to the Privacy Policy means that the user has read the updated version.",
+          "TwinBid may update this Privacy Policy from time to time.",
         ],
       },
       {
@@ -485,8 +495,8 @@ const RU: LegalContent = {
           "Для создания и поддержки аккаунта пользователя.",
           "Для идентификации пользователя в сервисе TwinBid.",
           "Для коммуникации с пользователем по поводу его аккаунта, обращений или использования сервиса.",
-          "Для отправки сервисных уведомлений, связанных с рекламными кампаниями.",
-          "Для отправки информационных сообщений о TwinBid при наличии согласия пользователя.",
+          "Для отправки сервисных уведомлений, связанных с рекламными кампаниями, включая уведомления о статусе кампании, модерации, завершении или иных событиях, связанных с кампанией.",
+          "Для отправки информационных сообщений о TwinBid, его сервисах, обновлениях, функциях и анонсах платформы при наличии согласия пользователя на получение таких сообщений.",
           "Для оказания технической поддержки.",
           "Для обеспечения безопасности и корректной работы сайта и сервиса.",
         ],
@@ -502,12 +512,17 @@ const RU: LegalContent = {
         ],
       },
       {
+        paragraphs: [
+          "В случаях, когда это требуется применимым законодательством, TwinBid запрашивает отдельное согласие на обработку персональных данных и отдельное согласие на получение информационных или маркетинговых сообщений.",
+        ],
+      },
+      {
         heading: "5. Информационные и маркетинговые сообщения",
         paragraphs: ["TwinBid может использовать email-адрес пользователя для отправки:"],
         list: [
           "Сервисных уведомлений, связанных с аккаунтом и рекламными кампаниями.",
           "Уведомлений о завершении кампаний, модерации, изменениях статуса или других сервисных событиях.",
-          "Информационных сообщений об обновлениях, услугах, функциях или предложениях TwinBid при наличии согласия.",
+          "Информационных сообщений об обновлениях, услугах, функциях или предложениях TwinBid.",
         ],
       },
       {
@@ -534,6 +549,12 @@ const RU: LegalContent = {
           "Хостинг-провайдеры.",
           "Поставщики аналитики или технической инфраструктуры.",
           "Инструменты поддержки клиентов.",
+        ],
+      },
+      {
+        paragraphs: [
+          "Такие третьи лица могут обрабатывать персональные данные только в объёме, необходимом для оказания их услуг TwinBid.",
+          "TwinBid также может раскрывать персональные данные, если это требуется применимым законодательством, решением суда или законным запросом компетентных органов.",
         ],
       },
       {
@@ -573,8 +594,7 @@ const RU: LegalContent = {
       {
         heading: "12. Изменения в настоящей Политике",
         paragraphs: [
-          "TwinBid может периодически обновлять настоящую Политику конфиденциальности. Обновлённая версия будет опубликована на сайте https://twinbid.io/.",
-          "Продолжение использования сайта или сервиса после внесения изменений означает, что пользователь ознакомился с обновлённой версией.",
+          "TwinBid может периодически обновлять настоящую Политику конфиденциальности.",
         ],
       },
       {
