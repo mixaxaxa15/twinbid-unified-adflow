@@ -92,8 +92,6 @@ const EN: LegalContent = {
         heading: "6. Informational and Service Notifications",
         paragraphs: [
           "TwinBid may send users service notifications related to their account, advertising campaigns, moderation, campaign completion, technical updates, or other service-related matters.",
-          "If the user has provided consent, TwinBid may also send informational or marketing communications about TwinBid services, updates, features, or offers.",
-          "The user may unsubscribe from informational or marketing communications at any time. However, TwinBid may still send necessary service notifications related to the user's account or active campaigns.",
         ],
       },
       {
@@ -379,8 +377,6 @@ const RU: LegalContent = {
         heading: "6. Информационные и сервисные уведомления",
         paragraphs: [
           "TwinBid может отправлять пользователям сервисные уведомления, связанные с их аккаунтом, рекламными кампаниями, модерацией, завершением кампаний, техническими обновлениями и другими сервисными вопросами.",
-          "При наличии согласия пользователя TwinBid может также отправлять информационные или маркетинговые сообщения об услугах, обновлениях, функциях или предложениях TwinBid.",
-          "Пользователь может отписаться от информационных или маркетинговых сообщений в любое время. Однако TwinBid может продолжать отправлять необходимые сервисные уведомления.",
         ],
       },
       {
