@@ -150,6 +150,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "status.draft": { ru: "Черновик", en: "Draft" },
   "status.completed": { ru: "Завершена", en: "Completed" },
   "status.moderation": { ru: "На модерации", en: "In moderation" },
+  "status.no_budget": { ru: "Нет бюджета", en: "No budget" },
 
   // Balance page
   "balance.title": { ru: "Баланс и платежи", en: "Balance & Payments" },
