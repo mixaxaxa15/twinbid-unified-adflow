@@ -130,15 +130,15 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
                   className="mt-0.5"
                 />
                 <Label htmlFor="reg-consent" className="text-xs leading-snug font-normal text-muted-foreground cursor-pointer">
-                  {t("lang") === "ru" ? "Я ознакомлен(а) и согласен(на) с " : "I have read and agree to the "}
+                  {lang === "ru" ? "Я ознакомлен(а) и согласен(на) с " : "I have read and agree to the "}
                   <Link to="/legal#terms" target="_blank" className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
                     {t("auth.consent.terms")}
                   </Link>
-                  {" "}{t("lang") === "ru" ? "и" : "and"}{" "}
+                  {" "}{lang === "ru" ? "и" : "and"}{" "}
                   <Link to="/legal#privacy" target="_blank" className="text-primary hover:underline" onClick={(e) => e.stopPropagation()}>
                     {t("auth.consent.privacy")}
                   </Link>
-                  {t("lang") === "ru"
+                  {lang === "ru"
                     ? ", а также даю согласие на обработку моих персональных данных"
                     : ", and I consent to the processing of my personal data"}
                 </Label>
