@@ -24,6 +24,7 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
   const [regConfirm, setRegConfirm] = useState("");
+  const [regConsent, setRegConsent] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { signIn, signUp } = useAuth();
@@ -43,6 +44,10 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!regConsent) {
+      toast.error(t("auth.consent.required"));
+      return;
+    }
     if (regPassword !== regConfirm) {
       toast.error(t("auth.passwordMismatch") || "Passwords do not match");
       return;
