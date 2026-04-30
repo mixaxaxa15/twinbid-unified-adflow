@@ -245,8 +245,13 @@ export default function DashboardCampaigns() {
                             {campaign.status === "active" && (
                               <DropdownMenuItem className="gap-2" onClick={() => toggleStatus(campaign.id)}><Pause className="h-4 w-4" /> {t("campaigns.pause")}</DropdownMenuItem>
                             )}
-                            {(campaign.status === "paused" || campaign.status === "no_budget") && (
+                            {campaign.status === "paused" && (
                               <DropdownMenuItem className="gap-2" onClick={() => toggleStatus(campaign.id)}><Play className="h-4 w-4" /> {t("campaigns.start")}</DropdownMenuItem>
+                            )}
+                            {campaign.status === "no_budget" && (
+                              <DropdownMenuItem className="gap-2" onClick={() => { toast.info(t("campaigns.increaseBudgetHint")); navigate(`/dashboard/campaigns/${campaign.id}/edit?tab=budget`); }}>
+                                <Plus className="h-4 w-4" /> {t("campaigns.increaseBudget")}
+                              </DropdownMenuItem>
                             )}
                             {campaign.status === "draft" && (
                               <DropdownMenuItem className="gap-2" onClick={() => navigate(`/dashboard/campaigns/${campaign.id}/edit`)}><Pencil className="h-4 w-4" /> {t("campaigns.finishCreation")}</DropdownMenuItem>
