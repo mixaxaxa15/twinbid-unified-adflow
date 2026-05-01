@@ -13,8 +13,6 @@ export interface Profile {
   balanceThreshold: number;
   notifyCampaignStatus: boolean;
   notifyLowBalance: boolean;
-  /** Toggle for the "campaign budget alert" notification. Persisted as `campaign_balanse_notifications` on the backend. */
-  notifyCampaignBudget: boolean;
   managerTelegram: string;
 }
 
