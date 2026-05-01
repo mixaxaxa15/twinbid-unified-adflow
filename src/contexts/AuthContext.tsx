@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { api, ApiError } from "@/api";
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/api/config";
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, API_BASE_URL } from "@/api/config";
 import { DEFAULT_MANAGER_TELEGRAM } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
