@@ -38,7 +38,7 @@ const generateId = () => String(Date.now()) + Math.random().toString(36).slice(2
 
 export default function CreateCampaign() {
   const navigate = useNavigate();
-  const { addCampaign } = useCampaigns();
+  const { addCampaign, updateCampaign } = useCampaigns();
   const { t } = useLanguage();
   const { addNotification } = useNotifications();
   const [step, setStep] = useState(1);
