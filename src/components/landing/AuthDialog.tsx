@@ -49,6 +49,10 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
       toast.error(t("auth.consent.required"));
       return;
     }
+    if (!regTelegram.trim()) {
+      toast.error(t("auth.telegramRequired"));
+      return;
+    }
     if (regPassword !== regConfirm) {
       toast.error(t("auth.passwordMismatch") || "Passwords do not match");
       return;
@@ -58,7 +62,7 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
       return;
     }
     setLoading(true);
-    const { error } = await signUp(regEmail, regPassword, regName);
+    const { error } = await signUp(regEmail, regPassword, regName, regTelegram.trim());
     setLoading(false);
     if (error) {
       toast.error(error);
