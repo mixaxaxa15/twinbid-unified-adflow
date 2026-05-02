@@ -21,6 +21,7 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [regName, setRegName] = useState("");
+  const [regTelegram, setRegTelegram] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
   const [regConfirm, setRegConfirm] = useState("");
