@@ -123,6 +123,11 @@ export function AuthDialog({ trigger, defaultTab = "login" }: AuthDialogProps) {
                   value={regPassword} onChange={(e) => setRegPassword(e.target.value)} required />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="telegram-register">{t("auth.telegram")}</Label>
+                <Input id="telegram-register" placeholder="@username" className="bg-background border-border"
+                  value={regTelegram} onChange={(e) => setRegTelegram(e.target.value)} required />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="password-confirm">{t("auth.confirmPassword")}</Label>
                 <Input id="password-confirm" type="password" placeholder="••••••••" className="bg-background border-border"
                   value={regConfirm} onChange={(e) => setRegConfirm(e.target.value)} required />
