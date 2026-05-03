@@ -23,6 +23,8 @@ export interface Notification {
 
 interface NotificationContextType {
   notifications: Notification[];
+  /** True after the initial fetch from the backend has completed (success or error). */
+  notificationsLoaded: boolean;
   /** Add a notification. If `persistent` is true and `apiType` is provided, it is also saved on the backend. */
   addNotification: (n: Omit<Notification, "id">) => Promise<string>;
   removeNotification: (id: string) => void;
