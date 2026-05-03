@@ -175,6 +175,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "status.completed": { ru: "Завершена", en: "Completed" },
   "status.moderation": { ru: "На модерации", en: "In moderation" },
   "status.no_budget": { ru: "Нет бюджета", en: "No budget" },
+  "status.waiting": { ru: "Ожидает запуска", en: "Waiting" },
 
   // Balance page
   "balance.title": { ru: "Баланс и платежи", en: "Balance & Payments" },
