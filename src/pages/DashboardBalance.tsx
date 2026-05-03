@@ -311,11 +311,11 @@ export default function DashboardBalance() {
 
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <Button onClick={handleTopUp} className="bg-accent hover:bg-accent/90 text-accent-foreground"
-                disabled={!finalAmount || finalAmount < 100 || !!pendingPayment}>
+                disabled={!finalAmount || finalAmount < 100 || !!pendingPayment || hasDraft}>
                 {t("balance.topUpBtn")} {finalAmount ? `$${finalAmount.toLocaleString()}` : ""}
                 {appliedPromo && finalAmount ? ` (+${Math.floor(finalAmount * appliedPromo.bonus / 100)}$ ${t("balance.promo.bonusShort")})` : ""}
               </Button>
-              {pendingPayment && (
+              {(pendingPayment || hasDraft) && (
                 <p className="text-xs text-yellow-500">{t("balance.disabledReason")}</p>
               )}
             </div>
