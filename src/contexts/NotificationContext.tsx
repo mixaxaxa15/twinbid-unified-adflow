@@ -68,8 +68,9 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
   // Hydrate from backend on login / mount
   useEffect(() => {
-    if (!user) { setNotifications([]); return; }
+    if (!user) { setNotifications([]); setNotificationsLoaded(false); return; }
     let cancelled = false;
+    setNotificationsLoaded(false);
     (async () => {
       try {
         const list = await api.listNotifications();
@@ -94,6 +95,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
         );
       } catch (e) {
         console.error("listNotifications failed", e);
+      } finally {
+        if (!cancelled) setNotificationsLoaded(true);
       }
     })();
     return () => { cancelled = true; };
