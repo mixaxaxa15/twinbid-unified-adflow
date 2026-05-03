@@ -25,7 +25,7 @@ export function PendingPaymentDialog() {
   const { t } = useLanguage();
   const { user } = useAuth();
   const { profile } = useProfile();
-  const { notifications, addNotification, removeNotification, attachHandlers } = useNotifications();
+  const { notifications, notificationsLoaded, addNotification, removeNotification, attachHandlers } = useNotifications();
   const {
     pendingPayment, setPendingPayment,
     isDialogOpen, openDialog, closeDialog,
