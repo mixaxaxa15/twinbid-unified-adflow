@@ -170,7 +170,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <NotificationContext.Provider value={{ notifications, addNotification, removeNotification, clearAll, attachHandlers }}>
+    <NotificationContext.Provider value={{ notifications, notificationsLoaded, addNotification, removeNotification, clearAll, attachHandlers }}>
       {children}
     </NotificationContext.Provider>
   );
