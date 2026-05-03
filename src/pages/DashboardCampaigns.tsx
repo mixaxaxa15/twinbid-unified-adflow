@@ -49,6 +49,7 @@ export default function DashboardCampaigns() {
     completed: { label: t("status.completed"), className: "bg-blue-500/10 text-blue-500 border-blue-500/20" },
     moderation: { label: t("status.moderation"), className: "bg-purple-500/10 text-purple-500 border-purple-500/20" },
     no_budget: { label: t("status.no_budget"), className: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20" },
+    waiting: { label: t("status.waiting"), className: "bg-orange-500/10 text-orange-400 border-orange-500/20" },
   };
 
   const filtered = campaigns.filter((c) => {
