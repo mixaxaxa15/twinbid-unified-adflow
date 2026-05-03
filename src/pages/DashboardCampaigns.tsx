@@ -179,6 +179,7 @@ export default function DashboardCampaigns() {
               <SelectItem value="moderation">{t("campaigns.moderationFilter")}</SelectItem>
               <SelectItem value="completed">{t("campaigns.completedFilter")}</SelectItem>
               <SelectItem value="no_budget">{t("campaigns.noBudgetFilter")}</SelectItem>
+              <SelectItem value="waiting">{t("campaigns.waitingFilter")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
