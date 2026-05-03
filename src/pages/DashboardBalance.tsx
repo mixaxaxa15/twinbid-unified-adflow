@@ -141,9 +141,11 @@ export default function DashboardBalance() {
     setPromoCode("");
   };
 
+  const hasDraft = topupRequests.some(tx => tx.status === "draft" && (!user || tx.user_id === user.id));
+
   const handleTopUp = async () => {
     if (!finalAmount || finalAmount < 100 || !user) return;
-    if (pendingPayment) {
+    if (pendingPayment || hasDraft) {
       toast.error(t("balance.disabledReason"));
       return;
     }
