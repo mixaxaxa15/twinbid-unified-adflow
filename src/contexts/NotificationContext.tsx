@@ -64,6 +64,7 @@ function descFor(n: ApiNotification): string | undefined {
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notificationsLoaded, setNotificationsLoaded] = useState(false);
 
   // Hydrate from backend on login / mount
   useEffect(() => {
