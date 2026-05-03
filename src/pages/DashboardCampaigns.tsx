@@ -247,7 +247,9 @@ export default function DashboardCampaigns() {
                             {campaign.status !== "moderation" && (
                               <DropdownMenuItem className="gap-2" onClick={() => navigate(`/dashboard/campaigns/${campaign.id}/edit`)}><Pencil className="h-4 w-4" /> {t("campaigns.edit")}</DropdownMenuItem>
                             )}
-                            <DropdownMenuItem className="gap-2" onClick={() => duplicateCampaign(campaign)}><Copy className="h-4 w-4" /> {t("campaigns.copy")}</DropdownMenuItem>
+                            {campaign.status !== "waiting" && (
+                              <DropdownMenuItem className="gap-2" onClick={() => duplicateCampaign(campaign)}><Copy className="h-4 w-4" /> {t("campaigns.copy")}</DropdownMenuItem>
+                            )}
                             <DropdownMenuSeparator />
                             {campaign.status === "active" && (
                               <DropdownMenuItem className="gap-2" onClick={() => toggleStatus(campaign.id)}><Pause className="h-4 w-4" /> {t("campaigns.pause")}</DropdownMenuItem>
