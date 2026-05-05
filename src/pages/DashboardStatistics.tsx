@@ -17,7 +17,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useStatistics } from "@/contexts/StatisticsContext";
 import { formatCountryLabel } from "@/lib/countries";
 import { api } from "@/api";
-import type { StatsGroupBy } from "@/api/types";
+import type { StatsGroupBy, StatsFilterBy } from "@/api/types";
 
 type GroupBy = "dates" | "hours" | "browsers" | "siteid" | "devices" | "os" | "country";
 type SortKey = "label" | "impressions" | "clicks" | "spent";
@@ -192,7 +192,7 @@ export default function DashboardStatistics() {
     const apiGroup = GROUP_MAP[appliedGroupBy].api;
     const from = appliedDateRange?.from ? appliedDateRange.from.toISOString().slice(0, 10) : "";
     const to = appliedDateRange?.to ? appliedDateRange.to.toISOString().slice(0, 10) : from;
-    const filters: Partial<Record<StatsGroupBy, string[]>> = {};
+    const filters: Partial<Record<StatsFilterBy, string[]>> = {};
     if (appliedFilterCountry.size) filters.country = Array.from(appliedFilterCountry);
     if (appliedFilterBrowser.size) filters.browser = Array.from(appliedFilterBrowser);
     if (appliedFilterDevice.size)  filters.device_type = Array.from(appliedFilterDevice);
@@ -201,26 +201,26 @@ export default function DashboardStatistics() {
     api.statsQuery({
       from, to,
       campaign_ids: Array.from(appliedCampaignIds),
-      group_by: [apiGroup],
+      creative_ids: appliedCreativeIds.size ? Array.from(appliedCreativeIds) : undefined,
+      group_by: apiGroup,
       filters,
     }).then(res => {
       if (cancelled) return;
-      const rows: UiRow[] = res.rows.map(r => {
-        const raw = String(r[apiGroup] ?? "");
-        const label = apiGroup === "date" ? formatDateLabel(raw)
-                    : apiGroup === "hour" ? formatHourLabel(raw)
-                    : raw;
+      const rows: UiRow[] = Object.entries(res.rows).map(([key, m]) => {
+        const label = apiGroup === "date" ? formatDateLabel(key)
+                    : apiGroup === "hour" ? formatHourLabel(key)
+                    : key;
         return {
           label,
-          impressions: Number(r.impressions) || 0,
-          clicks: Number(r.clicks) || 0,
-          spent: Number(r.spent) || 0,
+          impressions: Number(m.impressions) || 0,
+          clicks: Number(m.clicks) || 0,
+          spent: Number(m.spent) || 0,
         };
       });
       setData(rows);
     }).catch(e => { if (!cancelled) console.error("Stats query error:", e); });
     return () => { cancelled = true; };
-  }, [appliedCampaignIds, appliedGroupBy, appliedDateRange, appliedFilterCountry, appliedFilterBrowser, appliedFilterDevice, appliedFilterOS, hasSelection]);
+  }, [appliedCampaignIds, appliedCreativeIds, appliedGroupBy, appliedDateRange, appliedFilterCountry, appliedFilterBrowser, appliedFilterDevice, appliedFilterOS, hasSelection]);
 
   const metricCards = useMemo(() => {
     const totalImpressions = data.reduce((s, r) => s + r.impressions, 0);
