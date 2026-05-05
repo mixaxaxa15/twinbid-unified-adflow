@@ -270,9 +270,10 @@ Resp: `User`.
 **Request body:**
 ```json
 {
-  "from": "2025-04-15",
+  "from": "2025-04-22",
   "to":   "2025-04-22",
-  "campaign_ids": ["uuid", "..."],
+  "campaign_ids":  ["uuid", "..."],
+  "creative_ids":  ["uuid", "..."],
   "group_by": ["date"],
   "filters": {
     "country":     ["US", "RU"],
@@ -286,9 +287,10 @@ Resp: `User`.
 
 | Поле | Тип | Обяз. | Описание / маппинг на ClickHouse-параметры |
 |---|---|---|---|
-| `from` | `string YYYY-MM-DD` | да* | `{date_from:Date}`. Пустая строка = без нижней границы. |
+| `from` | `string YYYY-MM-DD` | да* | `{date_from:Date}`. Пустая строка = без нижней границы. Для одной конкретной даты фронт шлёт `from = to`. |
 | `to`   | `string YYYY-MM-DD` | да* | `{date_to:Date}`. Пустая строка = без верхней границы. |
-| `campaign_ids` | `string[]` (UUID) | нет | `{campaign_ids:Array(UUID)}`. `[]` = все кампании пользователя. |
+| `campaign_ids` | `string[]` (UUID) | нет | `{campaign_ids:Array(UUID)}`. `[]` = все кампании пользователя. Сужает выборку до выбранных кампаний. |
+| `creative_ids` | `string[]` (UUID) | нет | `{creative_ids:Array(UUID)}`. `[]` = все креативы. Подставляется в `WHERE creative_id IN (...)`. Используется когда в UI выбран конкретный креатив (или несколько). |
 | `group_by` | `StatsGroupBy[]` | да | Фронт всегда шлёт массив длины 1. Допустимые значения: `date`, `hour`, `campaign`, `country`, `creative`, `os`, `browser`, `device_type`, `site_id`. |
 | `filters.country` | `string[]` | нет | `{f_geo:Array(String)}` (колонка `geo`). |
 | `filters.browser` | `string[]` | нет | `{f_browser:Array(String)}`. |
@@ -297,6 +299,7 @@ Resp: `User`.
 | `filters.site_id` | `string[]` | нет | `{f_site_id:Array(String)}`. |
 
 \* Поля присутствуют всегда; пустая строка означает «не фильтровать».
+
 
 **Response:**
 ```json
