@@ -355,8 +355,8 @@ Resp: `User`.
 
 | Экран | Источник |
 |---|---|
-| `/dashboard` overview cards | `GET /api/stats/overview` (ClickHouse) + `GET /api/profile` |
-| Список кампаний на overview/campaigns | `GET /api/campaigns` (Postgres) + `GET /api/stats/campaign/:id/summary` (ClickHouse) на каждую строку (или батч `POST /api/stats/query` с `group_by:["campaign"]`) |
+| `/dashboard` overview cards | `POST /api/stats/query` с `group_by: "campaign"` (totals идут в `totals`) + `GET /api/profile` |
+| Список кампаний на overview/campaigns | `GET /api/campaigns` (Postgres) + `POST /api/stats/query` с `group_by: "campaign"` (одним запросом на все строки) |
 | `/dashboard/statistics` | `POST /api/stats/query` (ClickHouse) |
 | `/dashboard/balance` баланс/история | `GET /api/profile`, `GET /api/transactions`, `POST /api/transactions`, `PATCH /api/transactions/:id`, `POST /api/transactions/:id/cancel` |
 | Создание/редактирование кампании | `POST/PATCH /api/campaigns`, `POST /api/creatives/upload-url`, CRUD `/api/creatives` |
