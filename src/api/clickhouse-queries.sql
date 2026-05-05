@@ -29,6 +29,7 @@
 --
 --   WHERE user_id = {user_id:UUID}
 --     AND (length({campaign_ids:Array(UUID)}) = 0 OR campaign_id IN {campaign_ids:Array(UUID)})
+--     AND (length({creative_ids:Array(UUID)}) = 0 OR creative_id IN {creative_ids:Array(UUID)})
 --     AND event_date >= {date_from:Date}
 --     AND event_date <= {date_to:Date}
 --     AND (length({f_geo:Array(String)})         = 0 OR geo         IN {f_geo:Array(String)})
@@ -36,6 +37,10 @@
 --     AND (length({f_device_type:Array(String)}) = 0 OR device_type IN {f_device_type:Array(String)})
 --     AND (length({f_os:Array(String)})          = 0 OR os          IN {f_os:Array(String)})
 --     AND (length({f_site_id:Array(String)})     = 0 OR site_id     IN {f_site_id:Array(String)})
+--
+-- Notes:
+--  - For a single specific date, the frontend sends from = to (one day window).
+--  - {creative_ids} narrows the result to chosen creatives; pass [] to disable.
 
 
 -- =============================================================================
