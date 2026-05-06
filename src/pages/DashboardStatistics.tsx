@@ -190,8 +190,16 @@ export default function DashboardStatistics() {
     if (!hasSelection) { setData([]); return; }
     let cancelled = false;
     const apiGroup = GROUP_MAP[appliedGroupBy].api;
-    const from = appliedDateRange?.from ? appliedDateRange.from.toISOString().slice(0, 10) : "";
-    const to = appliedDateRange?.to ? appliedDateRange.to.toISOString().slice(0, 10) : from;
+    // Format using local date components (calendar shows local dates).
+    // toISOString() converts to UTC and shifts the day in non-zero timezones.
+    const fmtLocal = (d: Date) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    };
+    const from = appliedDateRange?.from ? fmtLocal(appliedDateRange.from) : "";
+    const to = appliedDateRange?.to ? fmtLocal(appliedDateRange.to) : from;
     const filters: Partial<Record<StatsFilterBy, string[]>> = {};
     if (appliedFilterCountry.size) filters.country = Array.from(appliedFilterCountry);
     if (appliedFilterBrowser.size) filters.browser = Array.from(appliedFilterBrowser);
