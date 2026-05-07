@@ -184,6 +184,7 @@ export default function DashboardStatistics() {
   const hasSelection = appliedCampaignIds.size > 0 && appliedDateRange?.from;
 
   const [data, setData] = useState<UiRow[]>([]);
+  const [slowLoading, setSlowLoading] = useState(false);
 
   useEffect(() => {
     if (!hasSelection) { setData([]); return; }
