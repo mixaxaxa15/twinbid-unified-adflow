@@ -217,17 +217,51 @@ export default function DashboardStatistics() {
       filters,
     }).then(res => {
       if (cancelled) return;
-      const rows: UiRow[] = Object.entries(res.rows).map(([key, m]) => {
-        const label = apiGroup === "date" ? formatDateLabel(key)
-                    : apiGroup === "hour" ? formatHourLabel(key)
-                    : key;
-        return {
-          label,
+      const byKey = new Map<string, { impressions: number; clicks: number; spent: number }>();
+      for (const [key, m] of Object.entries(res.rows)) {
+        byKey.set(key, {
           impressions: Number(m.impressions) || 0,
           clicks: Number(m.clicks) || 0,
           spent: Number(m.spent) || 0,
-        };
-      });
+        });
+      }
+      const empty = { impressions: 0, clicks: 0, spent: 0 };
+      let rows: UiRow[];
+      if (apiGroup === "hour") {
+        // Fill every hour in the selected range with zeros for missing buckets,
+        // so both the table and the chart show a continuous timeline.
+        const keys: string[] = [];
+        const start = new Date(`${from}T00:00:00Z`);
+        const end = new Date(`${to}T00:00:00Z`);
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          const y = d.getUTCFullYear();
+          const mo = String(d.getUTCMonth() + 1).padStart(2, "0");
+          const da = String(d.getUTCDate()).padStart(2, "0");
+          for (let h = 0; h < 24; h++) {
+            keys.push(`${y}-${mo}-${da} ${String(h).padStart(2, "0")}:00`);
+          }
+        }
+        rows = keys.map(k => {
+          const m = byKey.get(k) ?? empty;
+          return { label: formatHourLabel(k), ...m };
+        });
+      } else if (apiGroup === "date") {
+        const keys: string[] = [];
+        const start = new Date(`${from}T00:00:00Z`);
+        const end = new Date(`${to}T00:00:00Z`);
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          const y = d.getUTCFullYear();
+          const mo = String(d.getUTCMonth() + 1).padStart(2, "0");
+          const da = String(d.getUTCDate()).padStart(2, "0");
+          keys.push(`${y}-${mo}-${da}`);
+        }
+        rows = keys.map(k => {
+          const m = byKey.get(k) ?? empty;
+          return { label: formatDateLabel(k), ...m };
+        });
+      } else {
+        rows = Array.from(byKey.entries()).map(([key, m]) => ({ label: key, ...m }));
+      }
       setData(rows);
     }).catch(e => { if (!cancelled) console.error("Stats query error:", e); })
       .finally(() => {
