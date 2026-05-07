@@ -16,7 +16,7 @@ import { useCampaigns } from "@/contexts/CampaignContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useStatistics } from "@/contexts/StatisticsContext";
 import { formatCountryLabel } from "@/lib/countries";
-import { COUNTRY_CODES, OPERATING_SYSTEMS, BROWSERS } from "@/lib/dimensions";
+import { COUNTRY_CODES, OPERATING_SYSTEMS, BROWSERS, DEVICE_TYPES } from "@/lib/dimensions";
 import { api } from "@/api";
 import type { StatsGroupBy, StatsFilterBy } from "@/api/types";
 
@@ -52,7 +52,7 @@ function formatHourLabel(raw: string): string {
 const DIMENSION_MAP: Record<string, string[]> = {
   country: COUNTRY_CODES,
   browsers: BROWSERS,
-  devices: ["Mobile","Desktop","Tablet","Smart TV","Console"],
+  devices: DEVICE_TYPES,
   os: OPERATING_SYSTEMS,
 };
 
