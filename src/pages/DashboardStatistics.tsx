@@ -345,6 +345,14 @@ export default function DashboardStatistics() {
 
   return (
     <div className="space-y-6">
+      {slowLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm pointer-events-none">
+          <div className="pointer-events-auto rounded-lg border border-border bg-card px-6 py-4 shadow-lg flex items-center gap-3">
+            <RefreshCw className="h-5 w-5 animate-spin text-primary" />
+            <span className="text-sm text-foreground">{t("stats.loading")}</span>
+          </div>
+        </div>
+      )}
       <div>
         <h2 className="text-2xl font-bold">{t("stats.title")}</h2>
         <p className="text-muted-foreground text-sm">{t("stats.subtitle")}</p>
