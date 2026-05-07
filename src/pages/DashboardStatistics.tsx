@@ -157,9 +157,8 @@ export default function DashboardStatistics() {
     const campaign = campaigns.find(c => c.id === selectedCampaignId);
     if (!campaign) return result;
     (campaign.creatives || []).forEach((cr, idx) => {
-      const creativeId = `${selectedCampaignId}.${idx + 1}`;
       const label = cr.name || cr.title || cr.url || `Creative #${idx + 1}`;
-      result.push({ id: creativeId, label });
+      result.push({ id: cr.id, label });
     });
     return result;
   }, [selectedCampaignId, campaigns]);
