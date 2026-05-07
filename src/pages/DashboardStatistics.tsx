@@ -331,7 +331,8 @@ export default function DashboardStatistics() {
 
   const chartData = useMemo(() => {
     if (appliedGroupBy !== "dates" && appliedGroupBy !== "hours") return [];
-    return [...data].sort((a, b) => a.label.localeCompare(b.label));
+    // `data` is already inserted in chronological order by the fill loop above.
+    return data;
   }, [data, appliedGroupBy]);
 
   const sortedData = useMemo(() => {
