@@ -326,7 +326,7 @@ function ListItem({ config, list: rawList, onUpdate }: {
   onUpdate: (updates: Partial<TargetingState>) => void;
 }) {
   const list = { mode: rawList?.mode ?? "none", items: rawList?.items ?? [] };
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [inputValue, setInputValue] = useState("");
   const options = targetingOptions[config.key] || [];
   const isSchedule = config.key === "schedule";
@@ -334,7 +334,7 @@ function ListItem({ config, list: rawList, onUpdate }: {
   const isIp = config.key === "ip";
 
   const getDisplayLabel = (item: string) => {
-    if (countryNames[item]) return `${countryNames[item]} (${item})`;
+    if (countryNames[item]) return `${countryNames[item][lang]} (${item})`;
     if (languageNames[item]) return `${languageNames[item]} (${item})`;
     return item;
   };
