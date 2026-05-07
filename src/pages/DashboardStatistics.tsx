@@ -157,9 +157,8 @@ export default function DashboardStatistics() {
     const campaign = campaigns.find(c => c.id === selectedCampaignId);
     if (!campaign) return result;
     (campaign.creatives || []).forEach((cr, idx) => {
-      const creativeId = `${selectedCampaignId}.${idx + 1}`;
       const label = cr.name || cr.title || cr.url || `Creative #${idx + 1}`;
-      result.push({ id: creativeId, label });
+      result.push({ id: cr.id, label });
     });
     return result;
   }, [selectedCampaignId, campaigns]);
@@ -185,6 +184,7 @@ export default function DashboardStatistics() {
   const hasSelection = appliedCampaignIds.size > 0 && appliedDateRange?.from;
 
   const [data, setData] = useState<UiRow[]>([]);
+  const [slowLoading, setSlowLoading] = useState(false);
 
   useEffect(() => {
     if (!hasSelection) { setData([]); return; }
@@ -209,6 +209,11 @@ export default function DashboardStatistics() {
     if (appliedFilterDevice.size)  filters.device_type = Array.from(appliedFilterDevice);
     if (appliedFilterOS.size)      filters.os = Array.from(appliedFilterOS);
 
+    // If the request takes longer than 1s, surface a centered overlay so the
+    // user knows the stats are still loading (slow network etc.). The overlay
+    // disappears immediately when the response arrives.
+    const slowTimer = window.setTimeout(() => { if (!cancelled) setSlowLoading(true); }, 1000);
+
     api.statsQuery({
       from, to,
       campaign_ids: Array.from(appliedCampaignIds),
@@ -229,8 +234,16 @@ export default function DashboardStatistics() {
         };
       });
       setData(rows);
-    }).catch(e => { if (!cancelled) console.error("Stats query error:", e); });
-    return () => { cancelled = true; };
+    }).catch(e => { if (!cancelled) console.error("Stats query error:", e); })
+      .finally(() => {
+        window.clearTimeout(slowTimer);
+        if (!cancelled) setSlowLoading(false);
+      });
+    return () => {
+      cancelled = true;
+      window.clearTimeout(slowTimer);
+      setSlowLoading(false);
+    };
   }, [appliedCampaignIds, appliedCreativeIds, appliedGroupBy, appliedDateRange, appliedFilterCountry, appliedFilterBrowser, appliedFilterDevice, appliedFilterOS, hasSelection]);
 
   const metricCards = useMemo(() => {
@@ -332,6 +345,14 @@ export default function DashboardStatistics() {
 
   return (
     <div className="space-y-6">
+      {slowLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm pointer-events-none">
+          <div className="pointer-events-auto rounded-lg border border-border bg-card px-6 py-4 shadow-lg flex items-center gap-3">
+            <RefreshCw className="h-5 w-5 animate-spin text-primary" />
+            <span className="text-sm text-foreground">{t("stats.loading")}</span>
+          </div>
+        </div>
+      )}
       <div>
         <h2 className="text-2xl font-bold">{t("stats.title")}</h2>
         <p className="text-muted-foreground text-sm">{t("stats.subtitle")}</p>
