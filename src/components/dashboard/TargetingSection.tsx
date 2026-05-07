@@ -41,7 +41,7 @@ interface TargetingSectionProps {
 }
 
 function AutocompleteInput({
-  options, value, onChange, onAdd, existingItems, placeholder, t,
+  options, value, onChange, onAdd, existingItems, placeholder, t, lang,
 }: {
   options: string[];
   value: string;
@@ -50,6 +50,7 @@ function AutocompleteInput({
   existingItems: string[];
   placeholder: string;
   t: (key: string) => string;
+  lang: "ru" | "en";
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -57,7 +58,7 @@ function AutocompleteInput({
   const keepOpenRef = useRef(false);
 
   const getDisplayLabel = (option: string) => {
-    if (countryNames[option]) return `${countryNames[option]} (${option})`;
+    if (countryNames[option]) return `${countryNames[option][lang]} (${option})`;
     if (languageNames[option]) return `${languageNames[option]} (${option})`;
     return option;
   };
