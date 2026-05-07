@@ -16,6 +16,7 @@ import { useCampaigns } from "@/contexts/CampaignContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useStatistics } from "@/contexts/StatisticsContext";
 import { formatCountryLabel } from "@/lib/countries";
+import { COUNTRY_CODES, OPERATING_SYSTEMS, BROWSERS } from "@/lib/dimensions";
 import { api } from "@/api";
 import type { StatsGroupBy, StatsFilterBy } from "@/api/types";
 
@@ -47,18 +48,12 @@ function formatHourLabel(raw: string): string {
   return `${formatDateLabel(day)} ${hour}`;
 }
 
-function seedRandom(seed: string) {
-  let h = 0;
-  for (let i = 0; i < seed.length; i++) { h = Math.imul(31, h) + seed.charCodeAt(i) | 0; }
-  return () => { h = Math.imul(h ^ (h >>> 16), 0x45d9f3b); h = Math.imul(h ^ (h >>> 13), 0x45d9f3b); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
-}
-
 // Dictionaries used purely for filter UI options.
 const DIMENSION_MAP: Record<string, string[]> = {
-  country: ["US","GB","DE","FR","BR","IN","JP","RU","AU","CA","ES","IT","KR","TR","PL"],
-  browsers: ["Chrome","Safari","Firefox","Edge","Opera","Samsung Internet"],
-  devices: ["Mobile","Desktop","Tablet","Smart TV"],
-  os: ["Android","iOS","Windows","macOS","Linux","ChromeOS"],
+  country: COUNTRY_CODES,
+  browsers: BROWSERS,
+  devices: ["Mobile","Desktop","Tablet","Smart TV","Console"],
+  os: OPERATING_SYSTEMS,
 };
 
 // Multi-select filter component (supports plain string options or {value,label} pairs)
