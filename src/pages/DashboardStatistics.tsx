@@ -209,6 +209,11 @@ export default function DashboardStatistics() {
     if (appliedFilterDevice.size)  filters.device_type = Array.from(appliedFilterDevice);
     if (appliedFilterOS.size)      filters.os = Array.from(appliedFilterOS);
 
+    // If the request takes longer than 1s, surface a centered overlay so the
+    // user knows the stats are still loading (slow network etc.). The overlay
+    // disappears immediately when the response arrives.
+    const slowTimer = window.setTimeout(() => { if (!cancelled) setSlowLoading(true); }, 1000);
+
     api.statsQuery({
       from, to,
       campaign_ids: Array.from(appliedCampaignIds),
@@ -229,8 +234,16 @@ export default function DashboardStatistics() {
         };
       });
       setData(rows);
-    }).catch(e => { if (!cancelled) console.error("Stats query error:", e); });
-    return () => { cancelled = true; };
+    }).catch(e => { if (!cancelled) console.error("Stats query error:", e); })
+      .finally(() => {
+        window.clearTimeout(slowTimer);
+        if (!cancelled) setSlowLoading(false);
+      });
+    return () => {
+      cancelled = true;
+      window.clearTimeout(slowTimer);
+      setSlowLoading(false);
+    };
   }, [appliedCampaignIds, appliedCreativeIds, appliedGroupBy, appliedDateRange, appliedFilterCountry, appliedFilterBrowser, appliedFilterDevice, appliedFilterOS, hasSelection]);
 
   const metricCards = useMemo(() => {
