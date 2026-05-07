@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import {
   COUNTRIES, LANGUAGES, OPERATING_SYSTEMS, BROWSERS,
-  COUNTRY_CODES, LANGUAGE_CODES,
+  COUNTRY_CODES, LANGUAGE_CODES, DEVICE_TYPES,
 } from "@/lib/dimensions";
 
 const countryNames: Record<string, { ru: string; en: string }> =
@@ -21,7 +21,7 @@ const languageNames: Record<string, string> =
 const targetingOptions: Record<string, string[]> = {
   country: COUNTRY_CODES,
   language: LANGUAGE_CODES,
-  deviceType: ["Mobile","Desktop","Tablet","Smart TV","Console"],
+  deviceType: DEVICE_TYPES,
   os: OPERATING_SYSTEMS,
   browser: BROWSERS,
   sites: [],
