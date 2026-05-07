@@ -386,7 +386,7 @@ function ListItem({ config, list: rawList, onUpdate }: {
             <AutocompleteInput
               options={options} value={inputValue} onChange={setInputValue}
               onAdd={addItem} existingItems={list.items}
-              placeholder={t("targeting.autocompletePlaceholder")} t={t}
+              placeholder={t("targeting.autocompletePlaceholder")} t={t} lang={lang}
             />
           )}
           {list.items.length > 0 && !isSchedule && (
