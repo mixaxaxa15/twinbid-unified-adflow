@@ -446,9 +446,20 @@ export function CampaignProvider({ children }: { children: ReactNode }) {
 
   const updateCampaign = useCallback(async (id: string, updates: Partial<Campaign>) => {
     if (!user) throw new Error("Not authenticated");
+    // If the user selected CPC for popunder, convert to CPM before sending.
+    const current = campaigns.find(c => c.id === id);
+    const effectiveUpdates: Partial<Campaign> = { ...updates };
+    const fmt = effectiveUpdates.formatKey ?? current?.formatKey;
+    const pm = effectiveUpdates.pricingModel ?? current?.pricingModel;
+    if (fmt === "popunder" && pm === "cpc") {
+      effectiveUpdates.pricingModel = "cpm";
+      if (effectiveUpdates.priceValue !== undefined) {
+        effectiveUpdates.priceValue = (effectiveUpdates.priceValue as number) * 1000;
+      }
+    }
     // Build a *partial* patch so toggling a single field (status, budget,
     // ...) does not rewrite unrelated fields.
-    const patch = buildApiCampaignPatch(updates);
+    const patch = buildApiCampaignPatch(effectiveUpdates);
     if (Object.keys(patch).length > 0) {
       await api.patchCampaign(id, patch);
     }
