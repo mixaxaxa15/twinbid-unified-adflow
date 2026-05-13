@@ -194,7 +194,7 @@ function readApiTargeting(c: ApiCampaign): Record<string, TargetingState> {
 
 // ---- Mapping --------------------------------------------------------------
 function mapApiCampaignToUi(c: ApiCampaign, creatives: Creative[]): Campaign {
-  const priceValue = c.pricing_model === "cpc" ? c.base_price_cpc : c.base_price_cpm;
+  const priceValue = Number(c.base_price) || 0;
   return {
     id: c.campaign_id,
     name: c.campaign_name,
@@ -291,8 +291,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
     traffic_type: c.trafficType,
     vertical: verticalsToApiArray(c.verticals),
     pricing_model: c.pricingModel,
-    base_price_cpm: c.pricingModel === "cpm" ? c.priceValue : 0,
-    base_price_cpc: c.pricingModel === "cpc" ? c.priceValue : 0,
+    base_price: c.priceValue,
     evenness_by_slot_mode: c.evenSpend,
     goal_total_dollars: c.budget,
     start_ts: startTimestamp(c.startDate),
@@ -308,8 +307,7 @@ function buildApiCampaignBody(c: Omit<Campaign, "id">): Omit<ApiCampaign, "campa
   // convert the value to an equivalent CPM and send CPM as the model.
   if (c.formatKey === "popunder" && c.pricingModel === "cpc") {
     body.pricing_model = "cpm";
-    body.base_price_cpm = c.priceValue * 1000;
-    body.base_price_cpc = 0;
+    body.base_price = c.priceValue * 1000;
   }
   return body;
 }
@@ -339,16 +337,13 @@ function buildApiCampaignPatch(updates: Partial<Campaign>): Partial<ApiCampaign>
   if (updates.trafficType !== undefined) p.traffic_type = updates.trafficType;
   if (updates.verticals !== undefined) p.vertical = verticalsToApiArray(updates.verticals);
   if (updates.pricingModel !== undefined || updates.priceValue !== undefined) {
-    // Both fields cooperate; require pricingModel to know which slot.
     const pm = updates.pricingModel;
     const pv = updates.priceValue;
     if (pm !== undefined && pv !== undefined) {
       p.pricing_model = pm;
-      p.base_price_cpm = pm === "cpm" ? pv : 0;
-      p.base_price_cpc = pm === "cpc" ? pv : 0;
+      p.base_price = pv;
     } else if (pv !== undefined) {
-      // Fall back to writing both with whatever the caller sent.
-      p.base_price_cpm = pv;
+      p.base_price = pv;
     } else if (pm !== undefined) {
       p.pricing_model = pm;
     }
