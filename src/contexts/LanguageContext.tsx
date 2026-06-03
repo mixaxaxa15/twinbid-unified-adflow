@@ -118,6 +118,13 @@ const translations: Record<string, Record<"ru" | "en", string>> = {
     ru: "Необходимо принять условия для регистрации",
     en: "You must accept the terms to sign up",
   },
+  "auth.consent.intro": { ru: "Я ознакомлен(а) и согласен(на) с ", en: "I have read and agree to the " },
+  "auth.consent.and": { ru: "и", en: "and" },
+  "auth.consent.outro": {
+    ru: ", а также даю согласие на обработку моих персональных данных",
+    en: ", and I consent to the processing of my personal data",
+  },
+
 
   // Legal page
   "legal.pageTitle": { ru: "Правовая информация", en: "Legal" },
