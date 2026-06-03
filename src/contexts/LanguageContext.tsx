@@ -577,15 +577,23 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
+import { ES_TRANSLATIONS } from "@/lib/translations-es";
+
+interface LanguageContextType {
+  lang: Lang;
+  setLang: (lang: Lang) => void;
+  t: (key: string) => string;
+}
+
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>(() => {
     try {
       const stored = localStorage.getItem("twinbid_lang");
-      if (stored === "en" || stored === "ru") return stored;
+      if (stored === "en" || stored === "ru" || stored === "es") return stored;
     } catch {}
-    return "ru";
+    return "en";
   });
 
   const handleSetLang = useCallback((newLang: Lang) => {
@@ -594,9 +602,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const t = useCallback((key: string): string => {
+    if (lang === "es") {
+      const es = ES_TRANSLATIONS[key];
+      if (es !== undefined) return es;
+    }
     const entry = translations[key];
     if (!entry) return key;
-    return entry[lang] || entry.ru || key;
+    if (lang === "ru") return entry.ru || entry.en || key;
+    return entry.en || entry.ru || key;
   }, [lang]);
 
   return (
@@ -611,3 +624,4 @@ export function useLanguage() {
   if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
   return ctx;
 }
+
