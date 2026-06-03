@@ -571,11 +571,8 @@ const translations: Record<string, Record<"ru" | "en", string>> = {
   "notif.budgetRemaining": { ru: "бюджета осталось", en: "budget remaining" },
 };
 
-interface LanguageContextType {
-  lang: Lang;
-  setLang: (lang: Lang) => void;
-  t: (key: string) => string;
-}
+
+
 
 import { ES_TRANSLATIONS } from "@/lib/translations-es";
 
