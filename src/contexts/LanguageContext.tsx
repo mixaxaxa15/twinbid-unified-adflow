@@ -1,8 +1,15 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 
-type Lang = "ru" | "en";
+export type Lang = "en" | "ru" | "es";
 
-const translations: Record<string, Record<Lang, string>> = {
+export const LANGUAGE_OPTIONS: { code: Lang; label: string; name: string }[] = [
+  { code: "en", label: "EN", name: "English" },
+  { code: "ru", label: "RU", name: "Russian" },
+  { code: "es", label: "ES", name: "Spanish" },
+];
+
+const translations: Record<string, Record<"ru" | "en", string>> = {
+
   // Header / Nav
   "nav.benefits": { ru: "Преимущества", en: "Benefits" },
   "nav.formats": { ru: "Форматы", en: "Formats" },
