@@ -22,7 +22,7 @@ const Index = () => {
         <Marquee items={Array(6).fill(tryPhrase)} />
         <StartConditions />
         <BenefitsSection />
-        <Marquee items={["Popunder", "Native", "Banner", "In-Page Push", "1M+ Sites", "100+ Networks", "24/7 Support", "Real-Time Bidding"]} />
+        <Marquee items={["Popunder", "Native", "Banner", "In-Page Push", "1M+ Sites", "Antifraud", "24/7 Support", "Real-Time Bidding"]} />
         <CashbackSection />
         <FormatsSection />
         <StepsSection />
