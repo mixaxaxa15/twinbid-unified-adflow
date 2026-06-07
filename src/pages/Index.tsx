@@ -12,18 +12,18 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
   const { t } = useLanguage();
-  const tryPhrase = t("marquee.tryTwinBid");
+  const marquee1Items = [t("marquee.tryTwinBid"), t("marquee.registerNow")];
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden">
       <LiveCanvas />
       <Header />
       <main>
         <HeroSection />
-        <Marquee items={Array(6).fill(tryPhrase)} />
+        <Marquee items={marquee1Items} />
         <StartConditions />
         <BenefitsSection />
-        <CashbackSection />
         <Marquee items={["Popunder", "Native", "Banner", "In-Page Push", "1M+ Sites", "Antifraud", "24/7 Support", "Real-Time Bidding"]} />
+        <CashbackSection />
         <FormatsSection />
         <StepsSection />
         <CTASection />
