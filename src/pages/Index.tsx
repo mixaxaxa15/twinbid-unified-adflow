@@ -19,7 +19,7 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
-        <Marquee items={Array(6).fill(tryPhrase)} wave />
+        <Marquee items={Array(6).fill(tryPhrase)} />
         <StartConditions />
         <BenefitsSection />
         <Marquee items={["Popunder", "Native", "Banner", "In-Page Push", "1M+ Sites", "100+ Networks", "24/7 Support", "Real-Time Bidding"]} />
