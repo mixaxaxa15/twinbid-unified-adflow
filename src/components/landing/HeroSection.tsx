@@ -35,7 +35,7 @@ export function HeroSection() {
     hidden: {},
     show: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
   };
-  const word = {
+  const word: any = {
     hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
     show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
   };
