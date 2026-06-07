@@ -31,7 +31,7 @@ export function FormatsSection() {
               initial={{ opacity: 0, y: 40, rotateX: -15 }}
               whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
               whileHover={{ y: -10, scale: 1.04 }}
               className="group relative glass rounded-2xl p-6 text-center hover-glow transition-shadow duration-300"
               style={{ transformStyle: "preserve-3d" }}

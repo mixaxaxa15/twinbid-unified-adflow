@@ -45,7 +45,7 @@ export function StepsSection() {
                 initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.7, delay: index * 0.15, ease: "easeOut" }}
                 className={`relative flex flex-col sm:flex-row items-start gap-6 mb-12 last:mb-0 ${index % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'}`}
               >
                 <div className={`flex-1 ${index % 2 === 0 ? 'sm:text-right' : 'sm:text-left'}`}>

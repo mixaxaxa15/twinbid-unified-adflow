@@ -49,7 +49,7 @@ function BenefitCard({ benefit, index }: { benefit: { icon: any; title: string; 
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
       whileHover={{ y: -8, scale: 1.02 }}
       className="group glass rounded-2xl p-6 hover-glow transition-shadow duration-300 relative overflow-hidden"
     >
