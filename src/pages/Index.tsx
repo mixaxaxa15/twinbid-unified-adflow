@@ -7,13 +7,12 @@ import { FormatsSection } from "@/components/landing/FormatsSection";
 import { StepsSection } from "@/components/landing/StepsSection";
 import { CTASection } from "@/components/landing/CTASection";
 import { Footer } from "@/components/landing/Footer";
-import { LiveCanvas, CustomCursor, Marquee, ScrollKineticBand } from "@/components/landing/LiveCanvas";
+import { LiveCanvas, Marquee, ScrollKineticBand } from "@/components/landing/LiveCanvas";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background relative cursor-none-desktop">
+    <div className="min-h-screen bg-background relative">
       <LiveCanvas />
-      <CustomCursor />
       <Header />
       <main>
         <HeroSection />
