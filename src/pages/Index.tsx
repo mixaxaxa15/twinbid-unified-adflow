@@ -7,17 +7,20 @@ import { FormatsSection } from "@/components/landing/FormatsSection";
 import { StepsSection } from "@/components/landing/StepsSection";
 import { CTASection } from "@/components/landing/CTASection";
 import { Footer } from "@/components/landing/Footer";
-import { AnimatedBackground } from "@/components/landing/AnimatedBackground";
+import { LiveCanvas, CustomCursor, Marquee, ScrollKineticBand } from "@/components/landing/LiveCanvas";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background relative">
-      <AnimatedBackground />
+    <div className="min-h-screen bg-background relative cursor-none-desktop">
+      <LiveCanvas />
+      <CustomCursor />
       <Header />
       <main>
         <HeroSection />
+        <ScrollKineticBand>TwinBid</ScrollKineticBand>
         <StartConditions />
         <BenefitsSection />
+        <Marquee items={["Popunder", "Native", "Banner", "In-Page Push", "1M+ Sites", "100+ Networks", "24/7 Support", "Real-Time Bidding"]} />
         <CashbackSection />
         <FormatsSection />
         <StepsSection />

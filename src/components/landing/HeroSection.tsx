@@ -2,104 +2,78 @@ import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthDialog } from "./AuthDialog";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { motion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring, MotionValue } from "framer-motion";
 import { useRef, MouseEvent } from "react";
 
 export function HeroSection() {
   const { t } = useLanguage();
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 600], [0, 150]);
-  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
-  const heroScale = useTransform(scrollY, [0, 600], [1, 0.92]);
+  const ref = useRef<HTMLElement>(null);
 
-  // 3D tilt on mouse move
+  // Scroll-driven hero — the whole thing zooms/parallaxes as the user scrolls
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.35]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7, 1], [1, 0.6, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const blur = useTransform(scrollYProgress, [0, 1], ["blur(0px)", "blur(8px)"]);
+
+  // Mouse parallax on the entire hero — layers drift inversely to cursor
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), { stiffness: 120, damping: 18 });
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-8, 8]), { stiffness: 120, damping: 18 });
+  const px = useSpring(mx, { stiffness: 80, damping: 20 });
+  const py = useSpring(my, { stiffness: 80, damping: 20 });
 
-  const onMove = (e: MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mx.set((e.clientX - rect.left) / rect.width - 0.5);
-    my.set((e.clientY - rect.top) / rect.height - 0.5);
+  const onMove = (e: MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width - 0.5) * 2);
+    my.set(((e.clientY - r.top) / r.height - 0.5) * 2);
   };
   const onLeave = () => { mx.set(0); my.set(0); };
 
   const title1 = t("hero.title1");
   const title2 = t("hero.title2");
-  const words1 = title1.split(" ");
-  const words2 = title2.split(" ");
-
-  const container = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
-  };
-  const word: any = {
-    hidden: { opacity: 0, y: 40, filter: "blur(12px)" },
-    show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.8, ease: "easeOut" } },
-  };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-      <motion.div
-        style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
-        className="container mx-auto px-4 relative z-10"
-        ref={ref}
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
-      >
-        <motion.div
-          style={{ rotateX, rotateY, transformPerspective: 1200 }}
-          className="max-w-4xl mx-auto text-center"
-        >
+    <motion.section
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{ scale, opacity, y, filter: blur }}
+      className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden will-change-transform"
+    >
+      {/* Parallax floating shards reacting to mouse */}
+      <ParallaxShard x={px} y={py} depth={40} className="top-[20%] left-[10%] w-24 h-24 rounded-3xl gradient-primary opacity-30 blur-2xl" />
+      <ParallaxShard x={px} y={py} depth={-60} className="top-[30%] right-[12%] w-32 h-32 rounded-full bg-accent/40 blur-3xl" />
+      <ParallaxShard x={px} y={py} depth={30} className="bottom-[20%] left-[18%] w-40 h-40 rounded-full bg-primary/30 blur-3xl" />
+      <ParallaxShard x={px} y={py} depth={-30} className="bottom-[25%] right-[20%] w-20 h-20 rounded-2xl gradient-accent opacity-40 blur-xl" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8"
           >
-            <motion.div
-              animate={{ rotate: [0, 20, -20, 0], scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
+            <motion.div animate={{ rotate: [0, 20, -20, 0] }} transition={{ duration: 2.5, repeat: Infinity }}>
               <Zap className="w-4 h-4 text-primary" />
             </motion.div>
             <span className="text-sm text-muted-foreground">{t("hero.badge")}</span>
           </motion.div>
 
-          <motion.h1
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
-          >
-            <span className="text-foreground inline-block">
-              {words1.map((w, i) => (
-                <motion.span key={`a-${i}`} variants={word} className="inline-block mr-[0.25em]">
-                  {w}
-                </motion.span>
-              ))}
-            </span>
-            <span className="gradient-text inline-block">
-              {words2.map((w, i) => (
-                <motion.span
-                  key={`b-${i}`}
-                  variants={word}
-                  className="inline-block mr-[0.25em]"
-                  style={{ backgroundSize: "200% 200%" }}
-                >
-                  {w}
-                </motion.span>
-              ))}
-            </span>
-          </motion.h1>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[0.95] tracking-tight">
+            <RevealLine delay={0.1}>
+              <span className="text-foreground">{title1}</span>
+            </RevealLine>
+            <RevealLine delay={0.35}>
+              <span className="gradient-text">{title2}</span>
+            </RevealLine>
+          </h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed"
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10 leading-relaxed"
           >
             {t("hero.subtitle")}{" "}
             <span className="text-foreground font-semibold">{t("hero.subtitleSites")}</span>{" "}
@@ -109,42 +83,34 @@ export function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+            transition={{ duration: 0.6, delay: 0.9 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} className="relative group">
+            <div className="relative group">
               <motion.div
-                className="absolute -inset-1 rounded-xl gradient-accent opacity-60 blur-lg"
-                animate={{ opacity: [0.4, 0.8, 0.4] }}
+                className="absolute -inset-1 rounded-xl gradient-accent blur-lg"
+                animate={{ opacity: [0.4, 0.85, 0.4] }}
                 transition={{ duration: 2.5, repeat: Infinity }}
               />
               <AuthDialog
                 defaultTab="register"
                 trigger={
-                  <Button size="lg" className="relative gradient-primary text-primary-foreground hover:opacity-90 glow-primary text-lg px-8 py-6 h-auto">
+                  <Button size="lg" className="relative gradient-primary text-primary-foreground hover:opacity-90 text-lg px-8 py-6 h-auto">
                     {t("hero.cta")}
-                    <motion.span
-                      animate={{ x: [0, 6, 0] }}
-                      transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-                      className="inline-flex"
-                    >
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </motion.span>
+                    <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 }
               />
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto border-border hover:bg-secondary">
-                {t("hero.learnMore")}
-              </Button>
-            </motion.div>
+            </div>
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6 h-auto border-border hover:bg-secondary">
+              {t("hero.learnMore")}
+            </Button>
           </motion.div>
 
           <motion.div
             initial="hidden"
             animate="show"
-            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.15, delayChildren: 1.2 } } }}
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.15, delayChildren: 1.1 } } }}
             className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 max-w-2xl mx-auto"
           >
             {[
@@ -154,8 +120,7 @@ export function HeroSection() {
             ].map((s, i) => (
               <motion.div
                 key={i}
-                variants={{ hidden: { opacity: 0, y: 20, scale: 0.9 }, show: { opacity: 1, y: 0, scale: 1 } }}
-                whileHover={{ y: -6, scale: 1.05 }}
+                variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
                 className={`text-center ${s.span ? "col-span-2 md:col-span-1" : ""}`}
               >
                 <div className="text-3xl md:text-4xl font-bold gradient-text mb-1">{s.v}</div>
@@ -163,27 +128,39 @@ export function HeroSection() {
               </motion.div>
             ))}
           </motion.div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
+    </motion.section>
+  );
+}
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 items-center justify-center hidden scroll-indicator"
+function ParallaxShard({
+  x,
+  y,
+  depth,
+  className,
+}: {
+  x: MotionValue<number>;
+  y: MotionValue<number>;
+  depth: number;
+  className: string;
+}) {
+  const tx = useTransform(x, (v) => v * depth);
+  const ty = useTransform(y, (v) => v * depth);
+  return <motion.div style={{ x: tx, y: ty }} className={`absolute pointer-events-none ${className}`} />;
+}
+
+function RevealLine({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  return (
+    <span className="block overflow-hidden">
+      <motion.span
+        initial={{ y: "110%" }}
+        animate={{ y: "0%" }}
+        transition={{ duration: 1, delay, ease: [0.22, 1, 0.36, 1] as any }}
+        className="inline-block"
       >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0], opacity: [1, 0, 1] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="w-1 h-2 bg-primary rounded-full"
-          />
-        </motion.div>
-      </motion.div>
-    </section>
+        {children}
+      </motion.span>
+    </span>
   );
 }
