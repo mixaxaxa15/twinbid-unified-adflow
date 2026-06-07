@@ -541,4 +541,7 @@ export const ES_TRANSLATIONS: Record<string, string> = {
   // Budget notification
   "notif.campaignBudgetLow": "El presupuesto de la campaña se está agotando",
   "notif.budgetRemaining": "de presupuesto restante",
+
+  // Marquee
+  "marquee.tryTwinBid": "Prueba TwinBid en tu idioma",
 };
