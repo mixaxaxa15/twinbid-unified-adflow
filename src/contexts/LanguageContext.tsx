@@ -576,6 +576,9 @@ const translations: Record<string, Record<"ru" | "en", string>> = {
   // Budget notification
   "notif.campaignBudgetLow": { ru: "Бюджет кампании заканчивается", en: "Campaign budget running low" },
   "notif.budgetRemaining": { ru: "бюджета осталось", en: "budget remaining" },
+
+  // Marquee
+  "marquee.tryTwinBid": { ru: "Попробуй TwinBid на своём языке", en: "Try TwinBid in your language" },
 };
 
 
