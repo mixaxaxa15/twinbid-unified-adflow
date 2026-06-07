@@ -169,20 +169,23 @@ export function CustomCursor() {
   );
 }
 
-/** Infinite scrolling marquee strip — gives the page kinetic rhythm. */
+/** Infinite scrolling marquee strip — seamlessly loops with no jump. */
 export function Marquee({ items }: { items: string[] }) {
-  const row = [...items, ...items, ...items];
+  const row = [...items, ...items];
   return (
     <div className="relative overflow-hidden py-8 border-y border-border/40 bg-background/30 backdrop-blur-sm">
       <motion.div
-        className="flex gap-12 whitespace-nowrap"
-        animate={{ x: ["0%", "-33.333%"] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        className="flex whitespace-nowrap will-change-transform"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
       >
         {row.map((t, i) => (
-          <span key={i} className="flex items-center gap-12 text-2xl md:text-4xl font-bold text-foreground/70">
+          <span
+            key={i}
+            className="flex items-center gap-12 pr-12 text-2xl md:text-4xl font-bold text-foreground/70 shrink-0"
+          >
             {t}
-            <span className="w-2 h-2 rounded-full gradient-primary" />
+            <span className="w-2 h-2 rounded-full gradient-primary shrink-0" />
           </span>
         ))}
       </motion.div>
