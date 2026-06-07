@@ -182,8 +182,11 @@ export function Marquee({ items, wave = false }: { items: string[]; wave?: boole
           <span
             key={`${char}-${charIndex}`}
             aria-hidden="true"
-            className="inline-block"
-            style={{ transform: `translateY(${Math.sin((itemIndex * 4 + charIndex) * 0.72) * 12}px)` }}
+            className="inline-block gradient-text"
+            style={{
+              transform: `translateY(${Math.sin((itemIndex * 4 + charIndex) * 0.72) * 14}px)`,
+              backgroundImage: `linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%)`,
+            }}
           >
             {char === " " ? "\u00A0" : char}
           </span>
@@ -204,7 +207,8 @@ export function Marquee({ items, wave = false }: { items: string[]; wave?: boole
             {group.map((t, i) => (
               <span
                 key={`${copyIndex}-${i}`}
-                className={`flex items-center gap-12 pr-12 text-2xl md:text-4xl font-bold shrink-0 ${wave ? "text-foreground" : "text-foreground/70"}`}
+                className={`flex items-center gap-12 pr-12 text-2xl md:text-4xl font-bold shrink-0 ${wave ? "text-foreground leading-none" : "text-foreground/70"}`}
+                style={wave ? { transform: `translateY(${Math.sin(i * 0.95) * 18}px)` } : undefined}
               >
                 {renderText(t, i)}
                 <span className="w-2 h-2 rounded-full gradient-primary shrink-0" />
