@@ -578,7 +578,7 @@ const translations: Record<string, Record<"ru" | "en", string>> = {
   "notif.budgetRemaining": { ru: "бюджета осталось", en: "budget remaining" },
 
   // Marquee
-  "marquee.tryTwinBid": { ru: "Попробуй TwinBid на своём языке", en: "Try TwinBid in your language" },
+  "marquee.tryTwinBid": { ru: "Попробуй TwinBid", en: "Try TwinBid" },
 };
 
 
