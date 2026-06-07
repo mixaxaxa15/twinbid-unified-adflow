@@ -197,11 +197,7 @@ export function Marquee({ items, wave = false }: { items: string[]; wave?: boole
 
   return (
     <div className={`relative overflow-hidden border-y border-border/40 bg-background/30 backdrop-blur-sm ${wave ? "py-12" : "py-8"}`}>
-      <motion.div
-        className="flex w-max whitespace-nowrap will-change-transform"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 42, repeat: Infinity, ease: "linear" }}
-      >
+      <div className="marquee-track flex w-max whitespace-nowrap will-change-transform">
         {[0, 1].map((copyIndex) => (
           <div key={copyIndex} className="flex shrink-0" aria-hidden={copyIndex === 1}>
             {group.map((t, i) => (
@@ -216,7 +212,7 @@ export function Marquee({ items, wave = false }: { items: string[]; wave?: boole
             ))}
           </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }
