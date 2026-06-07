@@ -170,23 +170,47 @@ export function CustomCursor() {
 }
 
 /** Infinite scrolling marquee strip — seamlessly loops with no jump. */
-export function Marquee({ items }: { items: string[] }) {
-  const row = [...items, ...items];
-  return (
-    <div className="relative overflow-hidden py-8 border-y border-border/40 bg-background/30 backdrop-blur-sm">
-      <motion.div
-        className="flex whitespace-nowrap will-change-transform"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-      >
-        {row.map((t, i) => (
+export function Marquee({ items, wave = false }: { items: string[]; wave?: boolean }) {
+  const group = Array.from({ length: 3 }, () => items).flat();
+
+  const renderText = (text: string, itemIndex: number) => {
+    if (!wave) return text;
+
+    return (
+      <span className="inline-flex gradient-text" aria-label={text}>
+        {Array.from(text).map((char, charIndex) => (
           <span
-            key={i}
-            className="flex items-center gap-12 pr-12 text-2xl md:text-4xl font-bold text-foreground/70 shrink-0"
+            key={`${char}-${charIndex}`}
+            aria-hidden="true"
+            className="inline-block"
+            style={{ transform: `translateY(${Math.sin((itemIndex * 4 + charIndex) * 0.72) * 12}px)` }}
           >
-            {t}
-            <span className="w-2 h-2 rounded-full gradient-primary shrink-0" />
+            {char === " " ? "\u00A0" : char}
           </span>
+        ))}
+      </span>
+    );
+  };
+
+  return (
+    <div className={`relative overflow-hidden border-y border-border/40 bg-background/30 backdrop-blur-sm ${wave ? "py-12" : "py-8"}`}>
+      <motion.div
+        className="flex w-max whitespace-nowrap will-change-transform"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 42, repeat: Infinity, ease: "linear" }}
+      >
+        {[0, 1].map((copyIndex) => (
+          <div key={copyIndex} className="flex shrink-0" aria-hidden={copyIndex === 1}>
+            {group.map((t, i) => (
+              <span
+                key={`${copyIndex}-${i}`}
+                className={`flex items-center gap-12 pr-12 text-2xl md:text-4xl font-bold shrink-0 ${wave ? "text-foreground" : "text-foreground/70"}`}
+              >
+                {renderText(t, i)}
+                <span className="w-2 h-2 rounded-full gradient-primary shrink-0" />
+              </span>
+            ))}
+          </div>
         ))}
       </motion.div>
     </div>
