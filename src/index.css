@@ -176,4 +176,9 @@ input[type="number"] {
   .cursor-none-desktop * {
     cursor: none !important;
   }
+  .cursor-none-desktop input,
+  .cursor-none-desktop textarea,
+  .cursor-none-desktop [contenteditable="true"] {
+    cursor: text !important;
+  }
 }
