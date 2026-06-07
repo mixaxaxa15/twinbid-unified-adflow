@@ -151,6 +151,19 @@
   .scroll-indicator {
     display: none;
   }
+
+  .marquee-track {
+    animation: marquee-loop 42s linear infinite;
+  }
+}
+
+@keyframes marquee-loop {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 @media (min-width: 1280px) and (min-height: 800px) {

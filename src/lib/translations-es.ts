@@ -543,5 +543,5 @@ export const ES_TRANSLATIONS: Record<string, string> = {
   "notif.budgetRemaining": "de presupuesto restante",
 
   // Marquee
-  "marquee.tryTwinBid": "Prueba TwinBid en tu idioma",
+  "marquee.tryTwinBid": "Prueba TwinBid",
 };
