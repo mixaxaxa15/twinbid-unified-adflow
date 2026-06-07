@@ -7,10 +7,12 @@ import { FormatsSection } from "@/components/landing/FormatsSection";
 import { StepsSection } from "@/components/landing/StepsSection";
 import { CTASection } from "@/components/landing/CTASection";
 import { Footer } from "@/components/landing/Footer";
+import { AnimatedBackground } from "@/components/landing/AnimatedBackground";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      <AnimatedBackground />
       <Header />
       <main>
         <HeroSection />
