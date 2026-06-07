@@ -56,14 +56,14 @@ export function LiveCanvas() {
           translateX: "-50%",
           translateY: "-50%",
         }}
-        className="absolute w-[60vw] h-[60vw] rounded-full pointer-events-none"
+        className="absolute w-[45vw] h-[45vw] rounded-full pointer-events-none"
       >
         <div
           className="w-full h-full rounded-full"
           style={{
             background:
-              "radial-gradient(circle, hsl(var(--primary) / 0.22) 0%, hsl(var(--accent) / 0.10) 35%, transparent 70%)",
-            filter: "blur(40px)",
+              "radial-gradient(circle, hsl(var(--primary) / 0.55) 0%, hsl(var(--primary) / 0.28) 25%, hsl(var(--primary) / 0.12) 50%, transparent 75%)",
+            filter: "blur(60px)",
           }}
         />
       </motion.div>
