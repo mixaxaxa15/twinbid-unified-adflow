@@ -1,0 +1,1 @@
+window.__renderPrelander(window.PRELANDER_TEMPLATES.betting_odds_countdown);

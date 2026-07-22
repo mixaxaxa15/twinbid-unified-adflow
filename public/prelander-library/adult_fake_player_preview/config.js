@@ -1,0 +1,1 @@
+window.__renderPrelander(window.PRELANDER_TEMPLATES.adult_fake_player_preview);

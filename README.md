@@ -1,73 +1,36 @@
-# Welcome to your Lovable project
+# TwinBid Creative Lab — Atlas Cloud MVP
 
-## Project info
+Небольшой тестовый веб-сервис для двух сценариев:
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+- создание 1, 2 или 4 изображений через Seedream 5.0 Pro;
+- редактирование загруженного изображения через Seedream 5.0 Pro Edit.
 
-## How can I edit this code?
+## Запуск
 
-There are several ways of editing your application.
+1. Установите Node.js 20 или новее.
+2. Скопируйте `.env.example` в `.env`.
+3. Вставьте Atlas Cloud API-ключ в `ATLASCLOUD_API_KEY`.
+4. Выполните `npm start`.
+5. Откройте `http://localhost:3000`.
 
-**Use Lovable**
+Зависимости устанавливать не нужно. API-ключ используется только сервером и не попадает в браузер.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Проверка
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```text
+npm test
 ```
 
-**Edit a file directly in GitHub**
+Модели и API-схема сверены с официальными страницами Atlas Cloud 11 июля 2026 года. Цена в интерфейсе намеренно не зафиксирована: она меняется и должна браться из актуального биллинга Atlas.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Конструктор прелендов
 
-**Use GitHub Codespaces**
+Откройте `http://localhost:3000/builder.html`. В основном AI-конструкторе доступны шесть MVP-механик и 30 готовых одностраничных механик из архива, сгруппированных в восемь категорий: Adult content, Adult dating, Casino, Betting, Sweepstakes, Nutra / beauty, Finance и Utilities. Для архивных механик AI может полностью менять видимый слой: фон, композицию, карточки, типографику, кнопки, сетки, размеры, отступы, изображения и оформление игровой области. Исходные `type`, `behavior`, последовательность действий, tracking и redirect при этом сохраняются. Для wheel, scratch, slot и pick-box предусмотрены отдельные графические ассеты механики. Поддерживаются пользовательские изображения, версии, интерактивный предпросмотр и ZIP-экспорт.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+В проект локально встроены Inter, Roboto, Montserrat, Open Sans, Oswald, Playfair Display, Bebas Neue, Russo One, Ubuntu и PT Sans. В запросе к AI достаточно написать, например: «заголовок шрифтом Russo One, основной текст — PT Sans». В разделе «Шрифты» можно загрузить собственный WOFF2, WOFF, TTF или OTF до 10 МБ и указать его название. Пользовательский шрифт сохраняется в проекте, доступен AI по этому названию и вместе со встроенными файлами автоматически включается в автономный ZIP.
 
-## What technologies are used for this project?
+AI-планировщик и генерация изображений используют единый `ATLASCLOUD_API_KEY`. LLM вызывается через официальный Atlas Cloud endpoint `https://api.atlascloud.ai/v1/chat/completions`. По умолчанию используются быстрый `qwen/qwen3.5-flash` для структуры и бюджетный `black-forest-labs/flux-schnell` для MVP-картинок. Их можно заменить через `ATLAS_LLM_MODEL` и `ATLAS_IMAGE_MODEL`. Ключ остаётся только на сервере.
 
-This project is built with:
+В AI-конструкторе картинки генерируются отдельными ассетами (фон, объект, приз, этап), сохраняются локально в `public/generated` и проверяются в итоговом HTML. Пользовательские картинки сохраняются в `public/uploads`. Диагностический журнал доступен в интерфейсе и записывается в `logs/twinbid-mvp.log` без API-ключей.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Большой преленд собирается фоновым конвейером: короткий blueprint → отдельный LLM-запрос для каждой секции → серверная сборка и проверка. Браузер получает ID задачи и опрашивает прогресс, поэтому обновление страницы или долгий проект не обрывают работу. Невалидный JSON автоматически перегенерируется; если отдельная секция всё равно падает, сервер вставляет рабочий резервный блок и продолжает остальные. Тайм-ауты одного небольшого этапа задаются через `ATLAS_LLM_TIMEOUT_MS` и `ATLAS_LLM_RETRY_TIMEOUT_MS`. Параллельное изменение одного проекта из нескольких вкладок блокируется.

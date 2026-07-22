@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TwinBid · Creative Lab</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .placement-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#11120f;padding:4px;border-radius:12px;margin:0 0 12px}
+    .placement-tab{border:0;background:transparent;color:#aeb0a6;padding:10px 6px;border-radius:9px;font-weight:700;font-size:11px;cursor:pointer}
+    .placement-tab.active{background:#d9ff43;color:#11120f}
+    .result-actions{align-items:center;gap:8px;flex-wrap:wrap}.result-actions .result-index{margin-right:auto}
+    .download-result{border:0;background:#11120f;color:#fff;border-radius:7px;padding:7px 9px;font-size:10px;cursor:pointer}
+    .format-note{font-size:10px;color:#777870;margin:-13px 0 18px}
+    .native-size-field{display:block;margin:-7px 0 18px}.native-size-field>span{display:block;font-size:11px;font-weight:700;margin-bottom:7px}.native-size-input{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}.native-size-input input{width:100%;border:1px solid #dedfd7;border-radius:10px;padding:11px;font:inherit}.native-size-input output{border:1px solid #dedfd7;background:#f4f4ee;border-radius:10px;padding:11px;color:#777870}.native-size-field small{display:block;color:#777870;font-size:10px;margin-top:6px}
+    .crop-editor{margin-top:12px;border-top:1px solid #dedfd7;padding-top:12px}.fit-modes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}.fit-mode{cursor:pointer}.fit-mode input{position:absolute;opacity:0}.fit-mode span{display:block;border:1px solid #dedfd7;border-radius:9px;padding:9px;text-align:center;font-size:10px;font-weight:700}.fit-mode input:checked+span{background:#11120f;color:#fff;border-color:#11120f}.crop-stage{background:#e9eae3;border-radius:10px;overflow:hidden;touch-action:none;cursor:grab;min-height:100px;display:grid;place-items:center}.crop-stage:active{cursor:grabbing}.crop-stage canvas{display:block;width:100%;height:auto}.crop-controls{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;margin-top:9px;font-size:10px;color:#777870}.crop-controls input{width:100%}.crop-help{font-size:10px;color:#777870;margin:7px 0 0}.crop-stage.reference{opacity:.45;pointer-events:none}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="mark">T</span><span>TwinBid</span></a>
+    <div class="status"><a href="/builder.html" style="color:inherit;font-weight:700">Новый конструктор</a><a href="/prelands.html" style="color:inherit">Старый прототип</a><span id="statusDot" class="dot"></span><span id="apiStatus">Проверяем API</span></div>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">CREATIVE LAB / ATLAS CLOUD</p>
+      <h1>Генерация рекламных<br><em>креативов без рутины.</em></h1>
+      <p class="lead">Создавайте новые изображения или меняйте готовые через Seedream 5.0 Pro.</p>
+    </section>
+
+    <section class="workspace">
+      <form id="generatorForm" class="panel controls">
+        <label class="field-label">Формат рекламы</label>
+        <div class="placement-tabs" role="tablist">
+          <button type="button" class="placement-tab active" data-placement="native">Нативная</button>
+          <button type="button" class="placement-tab" data-placement="banner">Баннер</button>
+          <button type="button" class="placement-tab" data-placement="push">In-page push</button>
+        </div>
+        <input type="hidden" id="placement" value="native">
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab active" data-mode="generate">Создать с нуля</button>
+          <button type="button" class="tab" data-mode="edit">Изменить изображение</button>
+        </div>
+        <input type="hidden" id="mode" value="generate">
+
+        <label class="field-label" for="prompt">Опишите результат</label>
+        <textarea id="prompt" maxlength="5000" required placeholder="Например: премиальный рекламный постер мобильного приложения, тёмный фон, золотые акценты, яркая CTA-зона..."></textarea>
+        <div class="textarea-meta"><button type="button" id="exampleBtn">Вставить пример</button><span id="charCount">0 / 5000</span></div>
+
+        <div id="uploadField" class="upload-field hidden">
+          <label class="field-label" for="imageInput">Исходное изображение</label>
+          <label class="dropzone" for="imageInput">
+            <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp">
+            <img id="uploadPreview" alt="Предпросмотр">
+            <span id="uploadText"><b>Выберите файл</b><small>PNG, JPEG, WEBP · до 30 МБ</small></span>
+          </label>
+          <div id="cropEditor" class="crop-editor hidden">
+            <div class="fit-modes">
+              <label class="fit-mode"><input type="radio" name="editFitMode" value="crop" checked><span>Обрезать под формат</span></label>
+              <label class="fit-mode"><input type="radio" name="editFitMode" value="reference"><span>Весь файл как референс</span></label>
+            </div>
+            <div id="cropStage" class="crop-stage"><canvas id="cropCanvas" width="600" height="600"></canvas></div>
+            <div class="crop-controls"><span>Масштаб</span><input id="cropZoom" type="range" min="1" max="3" value="1" step="0.01"><button id="cropReset" class="ghost" type="button">Сбросить</button></div>
+            <p id="cropHelp" class="crop-help">Перетаскивайте изображение внутри рамки.</p>
+          </div>
+        </div>
+
+        <div class="option-grid">
+          <label><span>Количество</span><select id="count"><option value="1">1 изображение</option><option value="2">2 изображения</option><option value="4">4 изображения</option></select></label>
+          <label><span>Размер рекламы</span><select id="size"></select></label>
+          <label><span>Формат</span><select id="format"><option value="jpeg">JPEG</option><option value="png">PNG</option></select></label>
+        </div>
+        <label id="nativeSizeField" class="native-size-field">
+          <span>Сторона native-изображения, px</span>
+          <div class="native-size-input"><input id="nativeSize" type="number" min="200" max="4096" step="1" value="300" inputmode="numeric"><b>×</b><output id="nativeSizeOutput">300 px</output></div>
+          <small>Квадрат 1:1, минимальный размер — 200×200 px</small>
+        </label>
+        <p id="formatNote" class="format-note"></p>
+
+        <div class="adult-box">
+          <label class="switch-row"><span><b>Adult-контур</b><small>Только легальный synthetic-контент 18+</small></span><input id="adult" type="checkbox" role="switch"></label>
+          <label id="adultConfirmRow" class="confirm hidden"><input id="adultConfirmed" type="checkbox"> Все персонажи вымышленные и однозначно совершеннолетние</label>
+        </div>
+
+        <button id="submitBtn" class="primary" type="submit"><span>Создать креативы</span><span class="arrow">↗</span></button>
+        <p id="errorBox" class="error hidden"></p>
+      </form>
+
+      <section class="panel output">
+        <div class="output-head"><div><p class="eyebrow">РЕЗУЛЬТАТ</p><h2>Последняя генерация</h2></div><button id="clearBtn" class="ghost" type="button">Очистить</button></div>
+        <div id="emptyState" class="empty-state"><div class="spark">✦</div><h3>Здесь появятся креативы</h3><p>Заполните промпт слева и запустите генерацию.</p></div>
+        <div id="loader" class="loader hidden"><div class="orb"></div><h3>Atlas создаёт изображения</h3><p>Обычно это занимает от нескольких секунд до пары минут.</p></div>
+        <div id="gallery" class="gallery hidden"></div>
+      </section>
+    </section>
+  </main>
+  <template id="cardTemplate"><article class="result-card"><img alt="Сгенерированный креатив" referrerpolicy="no-referrer"><div class="result-actions"><span class="result-index"></span><button type="button" class="download-result">Скачать размер ↓</button><a target="_blank" rel="noopener noreferrer">Оригинал ↗</a></div></article></template>
+  <script src="/app.js" defer></script>
+</body>
+</html>
